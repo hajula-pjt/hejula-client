@@ -1,12 +1,15 @@
-@import './reset.css';
+@import "./reset.css";
 
 * {
   box-sizing: border-box;
+  padding: 0;
+  margin: 0;
 }
 
-html, body {
+html,
+body {
   font-size: 14px;
-  font-family: 'Noto Sans KR', sans-serif;
+  font-family: "Noto Sans KR", sans-serif;
 }
 
 input {
@@ -29,3 +32,7 @@ button {
   cursor: pointer;
 }
 
+input {
+  border: none;
+  background: none;
+}
