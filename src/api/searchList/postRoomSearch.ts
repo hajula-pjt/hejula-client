@@ -7,6 +7,7 @@ export interface PostRoomSearch {
   page: number;
   people: number;
   rows: number;
+  searchType: "VIEW" | "VISITOR" | "LOWPRICE" | "HIGHPRICE";
 }
 
 const postRoomSearch = async ({
@@ -16,19 +17,19 @@ const postRoomSearch = async ({
   page = 0,
   people,
   rows = 10,
+  searchType = "VIEW",
 }: PostRoomSearch) => {
   try {
     const {
       data: { resultValue },
-    } = await server.post("/accommodation/search", null, {
-      params: {
-        checkIn,
-        checkOut,
-        guSeq,
-        page,
-        people,
-        rows,
-      },
+    } = await server.post("/accommodation/search", {
+      checkIn,
+      checkOut,
+      guSeq,
+      page,
+      people,
+      rows,
+      searchType,
     });
 
     return resultValue;
