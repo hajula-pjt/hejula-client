@@ -9,10 +9,8 @@ const getAddressSearchResult = async ({ name }: { name: string }) => {
   try {
     const {
       data: { resultValue },
-    } = await server.post(`/accommodation/gu`, null, {
-      params: {
-        name,
-      },
+    } = await server.post(`/accommodation/gu`, {
+      name,
     });
 
     return resultValue;
