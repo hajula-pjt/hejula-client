@@ -1,6 +1,6 @@
 import axios from "axios";
 
-const BACKEND_SERVER_URL = "http://49.247.213.4:8080";
+export const BACKEND_SERVER_URL = "http://49.247.213.4:8080";
 
 const server = axios.create({});
 
