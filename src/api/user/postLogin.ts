@@ -7,14 +7,8 @@ export const postLogin = ({
   id: string;
   password: string;
 }) => {
-  server.post(
-    "/user/signIn",
-    {
-      id,
-      password,
-    },
-    {
-      withCredentials: true,
-    }
-  );
+  server.post("/user/signIn", {
+    id,
+    password,
+  });
 };
