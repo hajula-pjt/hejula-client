@@ -1,4 +1,4 @@
-import server from "../server";
+import axios from "axios";
 
 export interface PostRoomSearch {
   checkIn: string;
@@ -22,7 +22,7 @@ const postRoomSearch = async ({
   try {
     const {
       data: { resultValue },
-    } = await server.post("/accommodation/search", {
+    } = await axios.post("/accommodation/search", {
       checkIn,
       checkOut,
       guSeq,

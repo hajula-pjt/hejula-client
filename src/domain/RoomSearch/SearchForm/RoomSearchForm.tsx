@@ -19,7 +19,7 @@ import { createRoomSearchPath, getErrorMessage } from "./utils/utils";
 import { VALIDATION_CHECK_ITEM } from "./type/searchForm";
 import { dateFormat } from "../../../utils/calendar-util";
 
-const RoomSearchForm = () => {
+const RoomSearchForm = ({ shadow }: { shadow: boolean }) => {
   const router = useRouter();
 
   const {
@@ -70,6 +70,8 @@ const RoomSearchForm = () => {
       rows: 10,
     });
 
+    handleFocusedFieldChange({ field: null });
+
     router.push(path);
   };
 
@@ -83,7 +85,7 @@ const RoomSearchForm = () => {
 
   return (
     <>
-      <SearchForm onSubmit={handleSubmit}>
+      <SearchForm onSubmit={handleSubmit} shadow={shadow}>
         <RoomSearchField
           label="위치"
           id="gu"
@@ -167,6 +169,8 @@ const SearchForm = styled.form`
   padding: 1em 5em 1em 3em;
   border-radius: 3em;
   background: #fff;
+
+  box-shadow: ${({ shadow }) => shadow && "0px 2px 5px rgba(0,0,0,0.1)"};
 `;
 
 const Button = styled.p`

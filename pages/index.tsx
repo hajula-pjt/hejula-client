@@ -2,7 +2,29 @@ import Head from "next/head";
 
 import styled from "@emotion/styled";
 
-import AppLayout from "../src/components/AppLayout";
+const Home = () => {
+  return (
+    <>
+      <Head>
+        <title>HAJULA</title>
+        <meta name="description" content="Heajura project" />
+      </Head>
+
+      <main>
+        <VisualBanner>
+          <p className="title">이제, 여행은 가까운 곳에서</p>
+          <p className="description">
+            <span>새로운 공간에 머물러 보세요</span>
+            <span>여행 등 다양한 목적에 맞는 숙소를 찾아보세요</span>
+          </p>
+        </VisualBanner>
+        <AdminButton onClick={() => alert("준비중입니다.")}>
+          <button type="button">관리자 페이지로 이동</button>
+        </AdminButton>
+      </main>
+    </>
+  );
+};
 
 const VisualBanner = styled.section({
   padding: "300px 40px 45px",
@@ -39,26 +61,4 @@ const AdminButton = styled.section({
   },
 });
 
-export default function Home() {
-  return (
-    <AppLayout>
-      <Head>
-        <title>HAJULA</title>
-        <meta name="description" content="Heajura project" />
-      </Head>
-
-      <main>
-        <VisualBanner>
-          <p className="title">이제, 여행은 가까운 곳에서</p>
-          <p className="description">
-            <span>새로운 공간에 머물러 보세요</span>
-            <span>여행 등 다양한 목적에 맞는 숙소를 찾아보세요</span>
-          </p>
-        </VisualBanner>
-        <AdminButton onClick={() => alert("준비중입니다.")}>
-          <button type="button">관리자 페이지로 이동</button>
-        </AdminButton>
-      </main>
-    </AppLayout>
-  );
-}
+export default Home;

@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 
 import styled from "@emotion/styled";
+import { css } from "@emotion/react";
 
 import { IoMdMenu } from "react-icons/io";
 import { FaUserCircle } from "react-icons/fa";
@@ -12,11 +13,17 @@ import LoginForm from "../domain/Login/LoginForm";
 
 import { postLogin } from "../api/user/postLogin";
 
+import { useCookies } from "react-cookie";
+import axios from "axios";
+
 export type AppLayoutProps = {
   children: React.ReactNode;
+  isHasShadow: boolean;
 };
 
-const AppLayout = ({ children }: AppLayoutProps) => {
+const AppLayout = ({ children, isHasShadow }: AppLayoutProps) => {
+  const [cookies, setCookie, removeCookie] = useCookies(["Authorization"]);
+
   const [toggleMenuOpen, setToggleMenuOpen] = useState(false);
   const [loginFormOpen, setLoginFormOepn] = useState(false);
   const [loginFields, setLoginFields] = useState({
@@ -33,6 +40,10 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     setLoginFormOepn((prev) => !prev);
   };
 
+  const handleLogoutClick = () => {
+    removeCookie("Authorization");
+  };
+
   const handleChange = (e) => {
     const { name, value } = e.target;
 
@@ -42,15 +53,26 @@ const AppLayout = ({ children }: AppLayoutProps) => {
     }));
   };
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
 
-    postLogin({ id, password });
+    try {
+      const result = await postLogin({ id, password });
+      const accessToken = result.data.resultValue;
+
+      setCookie("Authorization", accessToken);
+      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
+
+      setToggleMenuOpen(false);
+      setLoginFormOepn(false);
+    } catch (e) {
+      console.error(e);
+    }
   };
 
   return (
     <>
-      <Header>
+      <Header shadow={isHasShadow}>
         <Logo>
           <button type="button">HAJULA</button>
         </Logo>
@@ -59,7 +81,7 @@ const AppLayout = ({ children }: AppLayoutProps) => {
             <button type="button">숙소</button>
           </p>
         </Nav>
-        <RoomSearchForm />
+        <RoomSearchForm shadow={isHasShadow} />
         <ToggleMenuButton>
           <button type="button" onClick={handleToggleMenuButtonClick}>
             <span className="menu">
@@ -73,8 +95,15 @@ const AppLayout = ({ children }: AppLayoutProps) => {
         {toggleMenuOpen && (
           <ToggleMenus>
             <li>
-              <button type="button" onClick={handleLoginModalToggle}>
-                로그인
+              <button
+                type="button"
+                onClick={
+                  cookies?.Authorization
+                    ? handleLogoutClick
+                    : handleLoginModalToggle
+                }
+              >
+                {cookies?.Authorization ? "로그아웃" : "로그인"}
               </button>
             </li>
           </ToggleMenus>
@@ -104,6 +133,21 @@ const Header = styled.header`
   align-items: center;
   padding: 1rem 40px;
   width: 100%;
+  z-index: 1;
+  ${({ shadow }) =>
+    shadow &&
+    css`
+      background: #fff;
+      box-shadow: 0px 3px 5px rgba(0, 0, 0, 0.1);
+      h1 *,
+      nav * {
+        color: #333 !important;
+      }
+      & + main {
+        position: relative;
+        margin-top: 200px;
+      }
+    `}
 `;
 
 const Logo = styled.h1`
@@ -147,7 +191,7 @@ const ToggleMenuButton = styled.nav`
 
 const ToggleMenus = styled.ul`
   position: absolute;
-  top: 100%;
+  top: 86%;
   right: 40px;
   width: 150px;
   border-radius: 10px;

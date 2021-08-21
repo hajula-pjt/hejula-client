@@ -4,7 +4,8 @@ export type ClickField =
   | "checkIn"
   | "checkOut"
   | "clickField"
-  | "clickedGu";
+  | "clickedGu"
+  | null;
 
 export interface RoomSearchChangeParams {
   name: ClickField;

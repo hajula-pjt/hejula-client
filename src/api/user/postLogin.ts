@@ -1,4 +1,4 @@
-import server from "../server";
+import axios from "axios";
 
 export const postLogin = ({
   id,
@@ -7,8 +7,10 @@ export const postLogin = ({
   id: string;
   password: string;
 }) => {
-  server.post("/user/signIn", {
+  const result = axios.post("/user/signIn", {
     id,
     password,
   });
+
+  return result;
 };

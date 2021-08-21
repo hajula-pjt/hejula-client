@@ -1,4 +1,4 @@
-import server from "../server";
+import axios from "axios";
 
 export interface guData {
   guSeq: number;
@@ -9,8 +9,10 @@ const getAddressSearchResult = async ({ name }: { name: string }) => {
   try {
     const {
       data: { resultValue },
-    } = await server.post(`/accommodation/gu`, {
-      name,
+    } = await axios.get(`/accommodation/gu`, {
+      params: {
+        name,
+      },
     });
 
     return resultValue;
