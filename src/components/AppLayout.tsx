@@ -1,4 +1,7 @@
-import React, { useState } from "react";
+import React, { ChangeEvent, useState } from "react";
+import { useCookies } from "react-cookie";
+
+import axios from "axios";
 
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
@@ -13,8 +16,12 @@ import LoginForm from "../domain/Login/LoginForm";
 
 import { postLogin } from "../api/user/postLogin";
 
-import { useCookies } from "react-cookie";
-import axios from "axios";
+import {
+  getLocalStorageItem,
+  removeLocalStorageItem,
+  setLocalStorageItem,
+} from "../utils/localStorage";
+import { useEffect } from "react";
 
 export type AppLayoutProps = {
   children: React.ReactNode;
@@ -22,6 +29,7 @@ export type AppLayoutProps = {
 };
 
 const AppLayout = ({ children, isHasShadow }: AppLayoutProps) => {
+  const [user, setUser] = useState(null);
   const [cookies, setCookie, removeCookie] = useCookies(["Authorization"]);
 
   const [toggleMenuOpen, setToggleMenuOpen] = useState(false);
@@ -31,6 +39,8 @@ const AppLayout = ({ children, isHasShadow }: AppLayoutProps) => {
     password: "",
   });
   const { id, password } = loginFields;
+
+  const [loginError, setLoginError] = useState(null);
 
   const handleToggleMenuButtonClick = () => {
     setToggleMenuOpen((prev) => !prev);
@@ -42,9 +52,11 @@ const AppLayout = ({ children, isHasShadow }: AppLayoutProps) => {
 
   const handleLogoutClick = () => {
     removeCookie("Authorization");
+    removeLocalStorageItem({ key: "userInfo" });
+    setUser(null);
   };
 
-  const handleChange = (e) => {
+  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
 
     setLoginFields((prev) => ({
@@ -53,22 +65,38 @@ const AppLayout = ({ children, isHasShadow }: AppLayoutProps) => {
     }));
   };
 
-  const handleSubmit = async (e) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
 
     try {
       const result = await postLogin({ id, password });
-      const accessToken = result.data.resultValue;
+      const accessToken = result.token;
+
+      const { nickname, userId, userSeq } = result;
 
       setCookie("Authorization", accessToken);
       axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
+      setLocalStorageItem({
+        key: "userInfo",
+        value: JSON.stringify({ nickname, userId, userSeq }),
+      });
+
+      setUser(getLocalStorageItem({ key: "userInfo" })?.nickname);
+
       setToggleMenuOpen(false);
       setLoginFormOepn(false);
+      setLoginError(null);
     } catch (e) {
-      console.error(e);
+      setLoginError(e.message);
     }
   };
+
+  useEffect(() => {
+    const user = getLocalStorageItem({ key: "userInfo" });
+
+    setUser(user?.nickname || null);
+  }, []);
 
   return (
     <>
@@ -76,20 +104,22 @@ const AppLayout = ({ children, isHasShadow }: AppLayoutProps) => {
         <Logo>
           <button type="button">HAJULA</button>
         </Logo>
-        <Nav>
-          <p>
-            <button type="button">숙소</button>
-          </p>
-        </Nav>
         <RoomSearchForm shadow={isHasShadow} />
         <ToggleMenuButton>
           <button type="button" onClick={handleToggleMenuButtonClick}>
+            {user ? (
+              <span>
+                👉🏻 <em>{user}</em>님, 안녕하세요
+              </span>
+            ) : (
+              <span>👉🏻 로그인 해주세요</span>
+            )}
             <span className="menu">
               <IoMdMenu />
             </span>
-            <span className="profile">
+            {/* <span className="profile">
               <FaUserCircle />
-            </span>
+            </span> */}
           </button>
         </ToggleMenuButton>
         {toggleMenuOpen && (
@@ -116,6 +146,7 @@ const AppLayout = ({ children, isHasShadow }: AppLayoutProps) => {
             password={password}
             handleChange={handleChange}
             handleSubmit={handleSubmit}
+            loginError={loginError}
           />
         </Modal>
       )}
@@ -165,7 +196,7 @@ const Nav = styled.nav`
   }
 `;
 
-const ToggleMenuButton = styled.nav`
+const ToggleMenuButton = styled.div`
   display: flex;
   align-items: center;
   background: #fff;
@@ -182,6 +213,9 @@ const ToggleMenuButton = styled.nav`
     .profile svg {
       font-size: 2.3rem;
       color: #717171;
+    }
+    span {
+      line-height: 1;
     }
     span + span {
       margin-left: 1rem;

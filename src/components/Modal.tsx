@@ -29,7 +29,7 @@ const Modal = ({
 
     window.addEventListener("click", handleClick);
     return () => {
-      window.addEventListener("click", handleClick);
+      window.removeEventListener("click", handleClick);
     };
   }, [modalRef, onOutsideClick]);
 

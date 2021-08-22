@@ -9,9 +9,16 @@ interface Props {
   password: string;
   handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
+  loginError: string | null;
 }
 
-const LoginForm = ({ id, password, handleSubmit, handleChange }: Props) => {
+const LoginForm = ({
+  id,
+  password,
+  handleSubmit,
+  handleChange,
+  loginError,
+}: Props) => {
   return (
     <Form onSubmit={handleSubmit}>
       <p>
@@ -34,6 +41,7 @@ const LoginForm = ({ id, password, handleSubmit, handleChange }: Props) => {
           onChange={handleChange}
         />
       </p>
+      {loginError && <Error>{loginError}</Error>}
       <ButtonBox>
         <Button type="submit">로그인하기</Button>
       </ButtonBox>
@@ -64,6 +72,11 @@ const Button = styled.button`
   color: #fff;
   border-radius: 10px;
   background: ${colorPalette.point};
+`;
+
+const Error = styled.p`
+  color: ${colorPalette.point};
+  text-align: center;
 `;
 
 export default LoginForm;
