@@ -75,7 +75,6 @@ const AppLayout = ({ children, isHasShadow }: AppLayoutProps) => {
       const { nickname, userId, userSeq } = result;
 
       setCookie("Authorization", accessToken);
-      axios.defaults.headers.common["Authorization"] = `Bearer ${accessToken}`;
 
       setLocalStorageItem({
         key: "userInfo",
@@ -93,10 +92,16 @@ const AppLayout = ({ children, isHasShadow }: AppLayoutProps) => {
   };
 
   useEffect(() => {
-    const user = getLocalStorageItem({ key: "userInfo" });
+    const userInfo = getLocalStorageItem({ key: "userInfo" });
 
-    setUser(user?.nickname || null);
-  }, []);
+    setUser(userInfo?.nickname || null);
+
+    if (cookies) {
+      axios.defaults.headers.common[
+        "Authorization"
+      ] = `Bearer ${cookies.Authorization}`;
+    }
+  }, [cookies]);
 
   return (
     <>
