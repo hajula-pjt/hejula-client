@@ -3,11 +3,11 @@ import axios from "axios";
 export interface PostRoomSearch {
   checkIn: string;
   checkOut: string;
-  guSeq: number;
-  page: number;
-  people: number;
-  rows: number;
-  searchType: "VIEW" | "VISITOR" | "LOWPRICE" | "HIGHPRICE";
+  guSeq: string;
+  page?: number;
+  people: string;
+  rows?: number;
+  searchType?: "VIEW" | "VISITOR" | "LOWPRICE" | "HIGHPRICE";
 }
 
 const postRoomSearch = async ({
@@ -23,11 +23,11 @@ const postRoomSearch = async ({
     const {
       data: { resultValue },
     } = await axios.post("/accommodation/search", {
-      checkIn,
-      checkOut,
-      guSeq,
+      checkIn: new Date(checkIn),
+      checkOut: new Date(checkOut),
+      guSeq: Number(guSeq),
       page,
-      people,
+      people: Number(people),
       rows,
       searchType,
     });

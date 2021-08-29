@@ -29,8 +29,10 @@ export interface CheckInOut {
 }
 
 export interface RoomSearchFormFields {
-  gu: string | null;
+  gu: number | null;
   checkIn: CheckInOut | null;
   checkOut: CheckInOut | null;
-  people: string | null;
+  people: number;
+  clickField: ClickField | null;
+  clickedGu: ClickedGu | null;
 }
