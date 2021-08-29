@@ -5,23 +5,15 @@ import {
   ClickedGu,
   ClickField,
   RoomSearchChangeParams,
+  RoomSearchFormFields,
 } from "../type/searchForm";
-
-export interface RoomSearchFormFields {
-  gu: string | null;
-  checkIn: CheckInOut | null;
-  checkOut: CheckInOut | null;
-  people: string | null;
-  clickField: ClickField | null;
-  clickedGu: ClickedGu | null;
-}
 
 const useSearchForm = () => {
   const [fields, setFields] = useState<RoomSearchFormFields>({
     gu: null,
     checkIn: null,
     checkOut: null,
-    people: null,
+    people: 0,
     clickField: null,
     clickedGu: null,
   });

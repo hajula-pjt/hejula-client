@@ -1,5 +1,7 @@
 import React from "react";
 import Image from "next/image";
+import { useRouter } from "next/router";
+
 import styled from "@emotion/styled";
 
 import { RoomItem } from "../../../../pages/search";
@@ -7,13 +9,19 @@ import { RoomItem } from "../../../../pages/search";
 import { myLoader } from "../../../utils/image";
 
 const SearchResultItem = ({ room }: { room: RoomItem }) => {
+  const router = useRouter();
+
   const { name, bathroom, bedroom, files, rating, max, accommodationSeq } =
     room;
 
   const fileName = files[0]?.fileNm ?? null;
 
+  const handleClick = () => {
+    router.push(`/detail/${accommodationSeq}`);
+  };
+
   return (
-    <Item key={accommodationSeq}>
+    <Item key={accommodationSeq} onClick={handleClick}>
       {fileName ? (
         <ImageWrap>
           <Image

@@ -4,13 +4,12 @@ import styled from "@emotion/styled";
 
 import CalendarItem from "./CelendarItem";
 
+import { YearAndMonthType } from "./type/type";
 import {
   CheckInOut,
   ClickField,
   RoomSearchFormFields,
-} from "../SearchForm/RoomSearchForm";
-
-import { YearAndMonthType } from "./type/type";
+} from "../SearchForm/type/searchForm";
 
 interface CalendarProps {
   currentCalendar: YearAndMonthType;
