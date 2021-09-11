@@ -11,18 +11,14 @@ import { useRouter } from "next/router";
 
 axios.defaults.baseURL = BACKEND_SERVER_URL;
 
-const isHasShadow = (path) => {
-  const PATHS = ["/search"];
-
-  return PATHS.includes(path);
-};
+const isMainPage = (path) => path === "/";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const router = useRouter();
 
   return (
     <CookiesProvider>
-      <AppLayout isHasShadow={isHasShadow(router.pathname)}>
+      <AppLayout isMainPage={isMainPage(router.pathname)}>
         <Component {...pageProps} />
       </AppLayout>
     </CookiesProvider>
