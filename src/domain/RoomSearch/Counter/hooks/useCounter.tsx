@@ -1,7 +1,6 @@
 import { useEffect } from "react";
 import { useCallback, useState } from "react";
-
-import { CheckInOut, ClickField } from "../../SearchForm/RoomSearchForm";
+import { ICheckInOut, TClickField } from "../../SearchForm/type";
 
 export type CounterKeys = "adult" | "children";
 
@@ -12,8 +11,8 @@ const useCounter = ({
     name,
     value,
   }: {
-    name: ClickField;
-    value: string | CheckInOut | number;
+    name: TClickField;
+    value: string | ICheckInOut | number;
   }) => void;
 }) => {
   const [counts, setCount] = useState({

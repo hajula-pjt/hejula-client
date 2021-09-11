@@ -1,10 +1,10 @@
 import { useCallback, useEffect, useState } from "react";
 import { CURRENT_MONTH, NEXT_MONTH } from "../../../../constants/calendar";
 import { getCalendarState, getWeeks } from "../../../../utils/calendar-util";
-import { days, SearchFormField, YearAndMonthType } from "../type/type";
+import { IYearAndMonth, TDays, TSearchFormField } from "../type";
 
 export const useCurrentCalendar = () => {
-  const [currentCalendar, setCurrentCalendar] = useState<YearAndMonthType>(
+  const [currentCalendar, setCurrentCalendar] = useState<IYearAndMonth>(
     getCalendarState({
       month: CURRENT_MONTH,
     })
@@ -13,7 +13,7 @@ export const useCurrentCalendar = () => {
   const { year: currentYear, month: currentMonth } = currentCalendar;
 
   const handleCurrentCalendarChange = useCallback(
-    ({ key, value }: { key: SearchFormField; value: number | days[] }) => {
+    ({ key, value }: { key: TSearchFormField; value: number | TDays[] }) => {
       setCurrentCalendar((prev) => ({
         ...prev,
         [key]: value,
@@ -41,7 +41,7 @@ export const useCurrentCalendar = () => {
 };
 
 export const useNextCalendar = () => {
-  const [nextCalendar, setNextCalendar] = useState<YearAndMonthType>(
+  const [nextCalendar, setNextCalendar] = useState<IYearAndMonth>(
     getCalendarState({
       month: NEXT_MONTH,
     })
@@ -50,7 +50,7 @@ export const useNextCalendar = () => {
   const { year: nextYear, month: nextMonth } = nextCalendar;
 
   const handleNextCalendarChange = useCallback(
-    ({ key, value }: { key: SearchFormField; value: number | days[] }) => {
+    ({ key, value }: { key: TSearchFormField; value: number | TDays[] }) => {
       setNextCalendar((prev) => ({
         ...prev,
         [key]: value,

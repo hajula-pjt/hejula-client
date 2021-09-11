@@ -8,18 +8,18 @@ import {
   getToday,
   isExistedDate,
 } from "../../../utils/calendar-util";
-import { days } from "./type/type";
 
-import { CheckInOut, RoomSearchFormFields } from "../SearchForm/RoomSearchForm";
+import { TDays } from "./type";
+import { ICheckInOut, IRoomSearchFormFields } from "../SearchForm/type";
 
 const WEEKS = ["일", "월", "화", "수", "목", "금", "토"];
 interface CalendarItemProps {
   year: number;
   month: number;
-  weeks: days[];
+  weeks: TDays[];
   testId: string;
-  fields: RoomSearchFormFields;
-  onChange: ({ value }: { value: CheckInOut }) => void;
+  fields: IRoomSearchFormFields;
+  onChange: ({ value }: { value: ICheckInOut }) => void;
   onClick: ({
     year,
     month,
@@ -47,10 +47,6 @@ const CalendarItem = ({
 
   const handleClick = useCallback(
     ({ year, month, date }) => {
-      // 1. 체크아웃 날짜를 체크인보다 작은 날짜로 선택하면 ?
-      //    1. 체크인 날짜를 변경한다
-      //    2. 체크아웃 날짜를 초기화한다
-
       const isLessThanToday = checkLessThan({
         originDate: getToday(),
         targetDate: dateFormat({

@@ -1,5 +1,5 @@
 import VALIDATIONS from "../constants/validations";
-import { VALIDATION_CHECK_ITEM } from "../type/searchForm";
+import { VALIDATION_CHECK_ITEM } from "../type";
 
 export const getErrorMessage = (key: VALIDATION_CHECK_ITEM) => {
   return VALIDATIONS[key];

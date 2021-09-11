@@ -3,10 +3,10 @@ import React, { useCallback } from "react";
 import { isFirstMonth, isLastMonth } from "../../../utils/calendar-util";
 
 import {
-  CheckInOut,
-  ClickField,
-  RoomSearchFormFields,
-} from "../SearchForm/type/searchForm";
+  ICheckInOut,
+  TClickField,
+  IRoomSearchFormFields,
+} from "../SearchForm/type";
 
 import CalendarSet from "./CalendarSet";
 
@@ -17,9 +17,9 @@ const CalendarContainer = ({
   onChange,
   onClickedFieldChange,
 }: {
-  fields: RoomSearchFormFields;
-  onChange: ({ value }: { value: CheckInOut }) => void;
-  onClickedFieldChange: ({ field }: { field: ClickField }) => void;
+  fields: IRoomSearchFormFields;
+  onChange: ({ value }: { value: ICheckInOut }) => void;
+  onClickedFieldChange: ({ field }: { field: TClickField }) => void;
 }) => {
   const {
     currentCalendar,
@@ -67,6 +67,7 @@ const CalendarContainer = ({
     if (isLastMonth(currentMonth)) {
       handleCurrentCalendarChange({ key: "year", value: currentYear + 1 });
       handleCurrentCalendarChange({ key: "month", value: 1 });
+
       handleNextCalendarChange({
         key: "month",
         value: nextMonth + 1,
@@ -76,11 +77,12 @@ const CalendarContainer = ({
 
     if (isLastMonth(nextMonth)) {
       handleNextCalendarChange({ key: "year", value: nextYear + 1 });
-      handleCurrentCalendarChange({ key: "month", value: currentMonth + 1 });
       handleNextCalendarChange({
         key: "month",
         value: 1,
       });
+
+      handleCurrentCalendarChange({ key: "month", value: currentMonth + 1 });
       return;
     }
 

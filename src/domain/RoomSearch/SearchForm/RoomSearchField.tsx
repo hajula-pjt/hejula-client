@@ -3,7 +3,7 @@ import React from "react";
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 
-import { CheckInOut, ClickField } from "./type/searchForm";
+import { CheckInOut, ClickField } from "./type";
 
 type FieldProps = {
   readOnly: boolean;

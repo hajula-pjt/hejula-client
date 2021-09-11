@@ -6,7 +6,7 @@ import {
   ClickField,
   RoomSearchChangeParams,
   RoomSearchFormFields,
-} from "../type/searchForm";
+} from "../type";
 
 const useSearchForm = () => {
   const [fields, setFields] = useState<RoomSearchFormFields>({

@@ -4,7 +4,7 @@ import { CookiesProvider } from "react-cookie";
 import { Global } from "@emotion/react";
 import axios from "axios";
 
-import globalStyle from "../src/styles/GlobalStyle";
+import globalStyle from "../src/styles/GlobalCss";
 import { BACKEND_SERVER_URL } from "../src/constants/server";
 import AppLayout from "../src/components/AppLayout";
 

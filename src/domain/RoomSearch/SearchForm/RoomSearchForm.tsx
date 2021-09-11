@@ -16,7 +16,7 @@ import useSearchForm from "./hooks/useSearchForm";
 import useSearchAddress from "./hooks/useSearchAddress";
 
 import { createRoomSearchPath, getErrorMessage } from "./utils/utils";
-import { VALIDATION_CHECK_ITEM } from "./type/searchForm";
+import { TVALIDATION_CHECK_ITEM } from "./type";
 import { dateFormat } from "../../../utils/calendar-util";
 
 const RoomSearchForm = ({ shadow }: { shadow: boolean }) => {
@@ -41,7 +41,7 @@ const RoomSearchForm = ({ shadow }: { shadow: boolean }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const checks: VALIDATION_CHECK_ITEM[] = ["checkIn", "checkOut", "people"];
+    const checks: TVALIDATION_CHECK_ITEM[] = ["checkIn", "checkOut", "people"];
 
     if (!clickedGu) {
       alert(getErrorMessage("clickedGu"));
