@@ -1,4 +1,4 @@
-import React, { ChangeEvent, useState } from "react";
+import React, { ChangeEvent, useState, useEffect } from "react";
 import { useCookies } from "react-cookie";
 
 import axios from "axios";
@@ -7,7 +7,6 @@ import styled from "@emotion/styled";
 import { css } from "@emotion/react";
 
 import { IoMdMenu } from "react-icons/io";
-import { FaUserCircle } from "react-icons/fa";
 
 import Modal from "./Modal";
 
@@ -21,14 +20,14 @@ import {
   removeLocalStorageItem,
   setLocalStorageItem,
 } from "../utils/localStorage";
-import { useEffect } from "react";
+import { FC } from "react";
 
 export type AppLayoutProps = {
   children: React.ReactNode;
-  isHasShadow: boolean;
+  isMainPage: boolean;
 };
 
-const AppLayout = ({ children, isHasShadow }: AppLayoutProps) => {
+const AppLayout: FC<AppLayoutProps> = ({ children, isMainPage }) => {
   const [user, setUser] = useState(null);
   const [cookies, setCookie, removeCookie] = useCookies(["Authorization"]);
 
@@ -105,11 +104,11 @@ const AppLayout = ({ children, isHasShadow }: AppLayoutProps) => {
 
   return (
     <>
-      <Header shadow={isHasShadow}>
+      <Header shadow={!isMainPage}>
         <Logo>
           <button type="button">HAJULA</button>
         </Logo>
-        <RoomSearchForm shadow={isHasShadow} />
+        <RoomSearchForm shadow={!isMainPage} />
         <ToggleMenuButton>
           <button type="button" onClick={handleToggleMenuButtonClick}>
             {user ? (
