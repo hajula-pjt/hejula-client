@@ -1,13 +1,14 @@
 import styled from "@emotion/styled";
+
 import { FaStar } from "react-icons/fa";
 import { GrFormView } from "react-icons/gr";
 
 import { colorPalette } from "../../config/color-config";
 
-import ImageSlider from "./ImageSlider";
+import ImageList from "./ImageList";
 
-const TopContents = ({ titleData, files }) => {
-  const { name, rating, views } = titleData;
+const TopContents = ({ detailData }) => {
+  const { name, rating, views, files } = detailData || {};
 
   return (
     <section>
@@ -24,7 +25,7 @@ const TopContents = ({ titleData, files }) => {
           </span>
         </p>
       </Head>
-      <ImageSlider files={files} />
+      <ImageList files={files} />
     </section>
   );
 };

@@ -10,16 +10,16 @@ interface ImageSliderProps {
   files: file[];
 }
 
-const ImageSlider: FC<ImageSliderProps> = ({ files }) => {
+const ImageList: FC<ImageSliderProps> = ({ files }) => {
   return (
     <>
       {files?.length === 0 && <p>등록된 이미지가 없습니다 🥲</p>}
-      <Slider>
+      <List>
         {files?.map((file) => {
           const fileName = file?.fileNm;
 
           return (
-            <ImageBox key={fileName}>
+            <ListItem key={fileName}>
               <Image
                 loader={myLoader}
                 src={fileName}
@@ -27,15 +27,15 @@ const ImageSlider: FC<ImageSliderProps> = ({ files }) => {
                 height="300"
                 alt={fileName}
               />
-            </ImageBox>
+            </ListItem>
           );
         })}
-      </Slider>
+      </List>
     </>
   );
 };
 
-export const Slider = styled.ul`
+export const List = styled.ul`
   display: flex;
   justify-content: space-between;
   gap: 20px;
@@ -43,8 +43,8 @@ export const Slider = styled.ul`
   background: #fff;
 `;
 
-export const ImageBox = styled.li`
+export const ListItem = styled.li`
   width: calc(50% - 10px);
 `;
 
-export default ImageSlider;
+export default ImageList;
