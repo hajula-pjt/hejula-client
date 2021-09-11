@@ -4,21 +4,21 @@ import styled from "@emotion/styled";
 
 import CalendarItem from "./CelendarItem";
 
-import { YearAndMonthType } from "./type/type";
+import { IYearAndMonth } from "./type";
 import {
-  CheckInOut,
-  ClickField,
-  RoomSearchFormFields,
-} from "../SearchForm/type/searchForm";
+  ICheckInOut,
+  IRoomSearchFormFields,
+  TClickField,
+} from "../SearchForm/type";
 
 interface CalendarProps {
-  currentCalendar: YearAndMonthType;
-  nextCalendar: YearAndMonthType;
+  currentCalendar: IYearAndMonth;
+  nextCalendar: IYearAndMonth;
   onPrevButtonClick: () => void;
   onNextButtonClick: () => void;
-  onChange: ({ value }: { value: CheckInOut }) => void;
-  fields: RoomSearchFormFields;
-  onClickedFieldChange: ({ field }: { field: ClickField }) => void;
+  onChange: ({ value }: { value: ICheckInOut }) => void;
+  fields: IRoomSearchFormFields;
+  onClickedFieldChange: ({ field }: { field: TClickField }) => void;
 }
 
 const CalendarSet = ({

@@ -1,7 +1,8 @@
 import dayjs from "dayjs";
 
 import { CURRENT_YEAR, FIRST_MONTH, LAST_MONTH } from "../constants/calendar";
-import { days } from "../domain/RoomSearch/Calendar/type/type";
+
+import { TDays } from "../domain/RoomSearch/Calendar/type";
 
 const isLastDayOfWeek = (day: number) => day === 6;
 const isLastDayOfMonth = ({ date, days }: { date: number; days: number[] }) =>
@@ -27,11 +28,11 @@ export const getWeeks = ({
 }: {
   month: number;
   year: number;
-}): days[] => {
+}): TDays[] => {
   const days = getDays({ year, month });
 
-  let weeks: days[] = [];
-  let week: days = Array(7).fill({
+  let weeks: TDays[] = [];
+  let week: TDays = Array(7).fill({
     date: null,
   });
 

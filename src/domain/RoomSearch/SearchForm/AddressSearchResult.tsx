@@ -3,7 +3,7 @@ import React from "react";
 import styled from "@emotion/styled";
 
 import { guData } from "../../../api/searchForm/getAddressSearchResult";
-import { ClickedGu, RoomSearchChangeParams } from "./type/searchForm";
+import { ClickedGu, RoomSearchChangeParams } from "./type";
 
 const AddressSearchResult = ({
   result,
