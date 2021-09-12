@@ -23,18 +23,20 @@ const SearchResult = () => {
   const router = useRouter();
   const [result, setResult] = useState<RoomItem[] | []>([]);
 
-  const { guSeq, checkIn, checkOut, people } = router.query;
+  const { guSeq, checkInDate, checkOutDate, people } = router.query;
+
+  const checkInOutDate = { checkInDate, checkOutDate };
 
   const getSearchRooms = useCallback(async () => {
     const result = await postRoomSearch({
-      checkIn,
-      checkOut,
+      checkInDate,
+      checkOutDate,
       guSeq,
       people,
     });
 
     setResult(result?.content || []);
-  }, [guSeq, checkIn, checkOut, people]);
+  }, [guSeq, checkInDate, checkOutDate, people]);
 
   useEffect(() => {
     getSearchRooms();
@@ -48,7 +50,13 @@ const SearchResult = () => {
       ) : (
         <ul>
           {result.map((room) => {
-            return <SearchResultItem key={room.accommodationSeq} room={room} />;
+            return (
+              <SearchResultItem
+                key={room.accommodationSeq}
+                room={room}
+                checkInOutDate={checkInOutDate}
+              />
+            );
           })}
         </ul>
       )}

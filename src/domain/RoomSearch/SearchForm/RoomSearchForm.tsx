@@ -15,8 +15,8 @@ import useCounter from "../Counter/hooks/useCounter";
 import useSearchForm from "./hooks/useSearchForm";
 import useSearchAddress from "./hooks/useSearchAddress";
 
-import { createRoomSearchPath, getErrorMessage } from "./utils/utils";
-import { TVALIDATION_CHECK_ITEM } from "./type";
+import { createRoomSearchPath, getErrorMessage } from "../../../utils/path";
+import { TInputCheckList } from "./type";
 import { dateFormat } from "../../../utils/calendar-util";
 
 const RoomSearchForm = ({ shadow }: { shadow: boolean }) => {
@@ -41,7 +41,7 @@ const RoomSearchForm = ({ shadow }: { shadow: boolean }) => {
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault();
 
-    const checks: TVALIDATION_CHECK_ITEM[] = ["checkIn", "checkOut", "people"];
+    const checks: TInputCheckList[] = ["checkIn", "checkOut", "people"];
 
     if (!clickedGu) {
       alert(getErrorMessage("clickedGu"));
@@ -58,11 +58,11 @@ const RoomSearchForm = ({ shadow }: { shadow: boolean }) => {
     const path = createRoomSearchPath({
       guSeq: clickedGu?.id,
       people,
-      checkIn: dateFormat({
+      checkInDate: dateFormat({
         date: `${checkIn?.year}-${checkIn?.month}-${checkIn?.date}`,
         format: "YYYY-MM-DD",
       }),
-      checkOut: dateFormat({
+      checkOutDate: dateFormat({
         date: `${checkOut?.year}-${checkOut?.month}-${checkOut?.date}`,
         format: "YYYY-MM-DD",
       }),

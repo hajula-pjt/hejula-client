@@ -8,9 +8,9 @@ import BodyContents from "../../src/domain/RoomDetail/BodyContents";
 
 const Detail = () => {
   const router = useRouter();
-  const { id } = router.query;
+  const { id, checkInDate, checkOutDate } = router.query;
 
-  const { detail } = useRoomDetail({ id });
+  const { detail } = useRoomDetail({ id, checkInDate, checkOutDate });
 
   return (
     <Container>

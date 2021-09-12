@@ -7,17 +7,47 @@ import styled from "@emotion/styled";
 import { RoomItem } from "../../../../pages/search";
 
 import { myLoader } from "../../../utils/image";
+import { createRoomDetailPath } from "../../../utils/path";
 
-const SearchResultItem = ({ room }: { room: RoomItem }) => {
+interface ICheckInOutDate {
+  checkInDate: string;
+  checkOutDate: string;
+}
+
+const SearchResultItem = ({
+  room,
+  checkInOutDate,
+}: {
+  room: RoomItem;
+  checkInOutDate: ICheckInOutDate;
+}) => {
   const router = useRouter();
 
-  const { name, bathroom, bedroom, files, rating, max, accommodationSeq } =
-    room;
+  const {
+    name,
+    bathroom,
+    bedroom,
+    files,
+    rating,
+    max,
+    accommodationSeq,
+    checkInDate,
+    checkOutDate,
+  } = {
+    ...room,
+    ...checkInOutDate,
+  };
 
   const fileName = files[0]?.fileNm ?? null;
 
   const handleClick = () => {
-    router.push(`/detail/${accommodationSeq}`);
+    const path = createRoomDetailPath({
+      guSeq: accommodationSeq,
+      checkInDate,
+      checkOutDate,
+    });
+
+    router.push(path);
   };
 
   return (

@@ -12,11 +12,7 @@ export interface RoomSearchChangeParams {
   value: string | ICheckInOut | number | IClickedGu | null;
 }
 
-export type TVALIDATION_CHECK_ITEM =
-  | "checkIn"
-  | "checkOut"
-  | "people"
-  | "clickedGu";
+export type TInputCheckList = "checkIn" | "checkOut" | "people" | "clickedGu";
 
 export interface IClickedGu {
   id: number;

@@ -1,8 +1,8 @@
 import axios from "axios";
 
 export interface PostRoomSearch {
-  checkIn: string;
-  checkOut: string;
+  checkInDate: string;
+  checkOutDate: string;
   guSeq: string;
   page?: number;
   people: string;
@@ -11,8 +11,8 @@ export interface PostRoomSearch {
 }
 
 const postRoomSearch = async ({
-  checkIn,
-  checkOut,
+  checkInDate,
+  checkOutDate,
   guSeq,
   page = 0,
   people,
@@ -23,8 +23,8 @@ const postRoomSearch = async ({
     const {
       data: { resultValue },
     } = await axios.post("/accommodation/search", {
-      checkIn: new Date(checkIn),
-      checkOut: new Date(checkOut),
+      checkIn: new Date(checkInDate),
+      checkOut: new Date(checkOutDate),
       guSeq: Number(guSeq),
       page,
       people: Number(people),
