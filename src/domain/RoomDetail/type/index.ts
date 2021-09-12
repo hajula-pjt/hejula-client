@@ -7,6 +7,7 @@ export interface IRoomDetail {
   checkoutTime: string;
   selfCheckinWay: string;
   admin: IAdmin;
+  rating: number;
 }
 
 export interface IAdmin {

@@ -1,8 +1,30 @@
 import styled from "@emotion/styled";
+import { FC } from "react";
+
+import { getCheckInOutInfo } from "../../utils/checkInOut";
+
 import IconTextList from "./IconTextList";
 
-const BodyContents = ({ roomData }) => {
-  const { admin, max, bathroom, bedroom, information, textList } = roomData;
+import ReservationForm from "./ReservationPreview";
+
+import { IRoomDetail } from "./type";
+
+interface IBodyContents {
+  detailData: IRoomDetail;
+}
+
+const BodyContents: FC<IBodyContents> = ({ detailData }) => {
+  const {
+    admin,
+    max,
+    bathroom,
+    bedroom,
+    information,
+    checkinTime,
+    checkoutTime,
+    selfCheckinWay,
+  } = detailData || {};
+
   return (
     <Contents>
       <LeftSide>
@@ -17,10 +39,16 @@ const BodyContents = ({ roomData }) => {
         <RoomIntroduce>
           <p>{information}</p>
         </RoomIntroduce>
-        <IconTextList textList={textList} />
+        <IconTextList
+          textList={getCheckInOutInfo({
+            checkinTime,
+            checkoutTime,
+            selfCheckinWay,
+          })}
+        />
       </LeftSide>
       <RightSide>
-        <ASide>사이드 메뉴</ASide>
+        <ReservationForm detailData={detailData} />
       </RightSide>
     </Contents>
   );
@@ -51,15 +79,7 @@ export const RoomIntroduce = styled.div`
 `;
 
 export const RightSide = styled.div`
-  flex-basis: 300px;
-`;
-
-export const ASide = styled.aside`
-  position: sticky;
-  top: 300px;
-  right: 0;
-  margin-left: 50px;
-  background: skyblue;
+  flex-basis: 400px;
 `;
 
 export const RoomInfo = styled.div`
