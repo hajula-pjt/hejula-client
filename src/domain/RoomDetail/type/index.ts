@@ -35,3 +35,10 @@ export interface IUseRoomDetail {
 export interface IUseRoomDetailReturnValue {
   detail: IRoomDetail;
 }
+
+export interface IRouterQueryData {
+  checkInDate: string;
+  checkOutDate: string;
+  adultCount: string;
+  childrenCount: string;
+}

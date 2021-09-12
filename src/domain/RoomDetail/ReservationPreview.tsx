@@ -1,27 +1,60 @@
-import styled from "@emotion/styled";
 import { FC } from "react";
+import { useRouter } from "next/router";
+import styled from "@emotion/styled";
 import { FaStar } from "react-icons/fa";
 
 import { colorPalette } from "../../config/color-config";
+import { getLocalStorageItem } from "../../utils/localStorage";
+import { createRoomReservationConfirmPath } from "../../utils/path";
 import { getPriceSum } from "../../utils/price";
 
 import TextList from "./TextList";
 
-import { IRoomDetail } from "./type";
+import { IRoomDetail, IRouterQueryData } from "./type";
 
 interface ReservationFormProps {
   detailData: IRoomDetail;
+  routerQueryData: IRouterQueryData;
 }
 
-const ReservationForm: FC<ReservationFormProps> = ({ detailData }) => {
-  const { checkinTime, checkoutTime, max, rating, priceList } =
-    detailData || {};
+const ReservationForm: FC<ReservationFormProps> = ({
+  detailData,
+  routerQueryData,
+}) => {
+  const router = useRouter();
+
+  const {
+    checkinTime,
+    checkoutTime,
+    max,
+    rating,
+    priceList,
+    accommodationSeq,
+  } = detailData || {};
+
+  const { checkInDate, checkOutDate, adultCount, childrenCount } =
+    routerQueryData;
 
   const textList = [
     { title: "체크인", text: checkinTime },
     { title: "체크아웃", text: checkoutTime },
     { title: "인원", text: max },
   ];
+
+  const handleClick = () => {
+    const { userSeq } = getLocalStorageItem({ key: "userInfo" }) || {};
+
+    const path = createRoomReservationConfirmPath({
+      accommodationSeq,
+      userSeq,
+      checkInDate,
+      checkOutDate,
+      adultCount,
+      childrenCount,
+    });
+
+    router.push(path);
+  };
 
   return (
     <Wrap>
@@ -34,7 +67,9 @@ const ReservationForm: FC<ReservationFormProps> = ({ detailData }) => {
       </Top>
       <TextList textList={textList} />
       <ButtonBox>
-        <Button type="button">예약하기</Button>
+        <Button onClick={handleClick} type="button">
+          예약하기
+        </Button>
       </ButtonBox>
       <Bottom>
         <em>총 합계</em>

@@ -1,5 +1,5 @@
-import styled from "@emotion/styled";
 import { FC } from "react";
+import styled from "@emotion/styled";
 
 import { getCheckInOutInfo } from "../../utils/checkInOut";
 
@@ -7,13 +7,14 @@ import IconTextList from "./IconTextList";
 
 import ReservationForm from "./ReservationPreview";
 
-import { IRoomDetail } from "./type";
+import { IRoomDetail, IUseRoomDetail } from "./type";
 
 interface IBodyContents {
   detailData: IRoomDetail;
+  routerQueryData: IUseRoomDetail;
 }
 
-const BodyContents: FC<IBodyContents> = ({ detailData }) => {
+const BodyContents: FC<IBodyContents> = ({ detailData, routerQueryData }) => {
   const {
     admin,
     max,
@@ -48,7 +49,10 @@ const BodyContents: FC<IBodyContents> = ({ detailData }) => {
         />
       </LeftSide>
       <RightSide>
-        <ReservationForm detailData={detailData} />
+        <ReservationForm
+          detailData={detailData}
+          routerQueryData={routerQueryData}
+        />
       </RightSide>
     </Contents>
   );

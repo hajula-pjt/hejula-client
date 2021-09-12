@@ -9,34 +9,21 @@ import { RoomItem } from "../../../../pages/search";
 import { myLoader } from "../../../utils/image";
 import { createRoomDetailPath } from "../../../utils/path";
 
-interface ICheckInOutDate {
-  checkInDate: string;
-  checkOutDate: string;
-}
+import { IRouterQueryData } from "../../RoomDetail/type";
 
 const SearchResultItem = ({
   room,
-  checkInOutDate,
+  routerQueryData,
 }: {
   room: RoomItem;
-  checkInOutDate: ICheckInOutDate;
+  routerQueryData: IRouterQueryData;
 }) => {
   const router = useRouter();
 
-  const {
-    name,
-    bathroom,
-    bedroom,
-    files,
-    rating,
-    max,
-    accommodationSeq,
-    checkInDate,
-    checkOutDate,
-  } = {
-    ...room,
-    ...checkInOutDate,
-  };
+  const { name, bathroom, bedroom, files, rating, max, accommodationSeq } =
+    room;
+  const { checkInDate, checkOutDate, adultCount, childrenCount } =
+    routerQueryData;
 
   const fileName = files[0]?.fileNm ?? null;
 
@@ -45,6 +32,8 @@ const SearchResultItem = ({
       guSeq: accommodationSeq,
       checkInDate,
       checkOutDate,
+      adultCount,
+      childrenCount,
     });
 
     router.push(path);
