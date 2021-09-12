@@ -57,7 +57,8 @@ const RoomSearchForm = ({ shadow }: { shadow: boolean }) => {
 
     const path = createRoomSearchPath({
       guSeq: clickedGu?.id,
-      people,
+      childrenCount,
+      adultCount,
       checkInDate: dateFormat({
         date: `${checkIn?.year}-${checkIn?.month}-${checkIn?.date}`,
         format: "YYYY-MM-DD",

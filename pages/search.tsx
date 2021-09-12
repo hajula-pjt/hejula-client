@@ -6,6 +6,8 @@ import postRoomSearch from "../src/api/searchList/postRoomSearch";
 
 import SearchResultItem from "../src/domain/RoomSearch/SearchResult/SearchResultItem";
 
+import { Container } from "./style/layout";
+
 interface File {
   fileNm: string;
 }
@@ -23,24 +25,49 @@ const SearchResult = () => {
   const router = useRouter();
   const [result, setResult] = useState<RoomItem[] | []>([]);
 
-  const { guSeq, checkInDate, checkOutDate, people } = router.query;
+  const { guSeq, checkInDate, checkOutDate, adultCount, childrenCount } =
+    router.query;
 
-  const checkInOutDate = { checkInDate, checkOutDate };
+  const routerQueryData = {
+    checkInDate,
+    checkOutDate,
+    adultCount,
+    childrenCount,
+  };
 
   const getSearchRooms = useCallback(async () => {
     const result = await postRoomSearch({
       checkInDate,
       checkOutDate,
       guSeq,
-      people,
+      people: Number(adultCount) + Number(childrenCount),
     });
 
     setResult(result?.content || []);
-  }, [guSeq, checkInDate, checkOutDate, people]);
+  }, [guSeq, checkInDate, checkOutDate, adultCount, childrenCount]);
 
   useEffect(() => {
-    getSearchRooms();
-  }, [getSearchRooms]);
+    const checkList = [
+      guSeq,
+      checkInDate,
+      checkOutDate,
+      adultCount,
+      childrenCount,
+    ];
+
+    const isNotNull = checkList?.every((item) => item ?? false);
+
+    if (isNotNull) {
+      getSearchRooms();
+    }
+  }, [
+    guSeq,
+    checkInDate,
+    checkOutDate,
+    adultCount,
+    childrenCount,
+    getSearchRooms,
+  ]);
 
   return (
     <Container>
@@ -54,7 +81,7 @@ const SearchResult = () => {
               <SearchResultItem
                 key={room.accommodationSeq}
                 room={room}
-                checkInOutDate={checkInOutDate}
+                routerQueryData={routerQueryData}
               />
             );
           })}
@@ -63,11 +90,6 @@ const SearchResult = () => {
     </Container>
   );
 };
-
-export const Container = styled.main`
-  margin: 0 auto;
-  max-width: 800px;
-`;
 
 const Title = styled.h2`
   margin: 40px 0;

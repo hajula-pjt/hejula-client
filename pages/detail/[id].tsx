@@ -8,19 +8,27 @@ import BodyContents from "../../src/domain/RoomDetail/BodyContents";
 
 const Detail = () => {
   const router = useRouter();
-  const { id, checkInDate, checkOutDate } = router.query;
+  const { id, checkInDate, checkOutDate, adultCount, childrenCount } =
+    router.query;
+  const routerQueryData = {
+    id,
+    checkInDate,
+    checkOutDate,
+    adultCount,
+    childrenCount,
+  };
 
   const { detail } = useRoomDetail({ id, checkInDate, checkOutDate });
 
   return (
     <Container>
       <TopContents detailData={detail} />
-      <BodyContents detailData={detail} />
+      <BodyContents detailData={detail} routerQueryData={routerQueryData} />
     </Container>
   );
 };
 
-export const Container = styled.main`
+const Container = styled.main`
   margin: 0 auto;
   max-width: 1000px;
   section + section {
