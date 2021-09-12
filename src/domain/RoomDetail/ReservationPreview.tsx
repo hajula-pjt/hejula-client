@@ -1,8 +1,9 @@
 import styled from "@emotion/styled";
 import { FC } from "react";
-
 import { FaStar } from "react-icons/fa";
+
 import { colorPalette } from "../../config/color-config";
+import { getPriceSum } from "../../utils/price";
 
 import TextList from "./TextList";
 
@@ -13,7 +14,8 @@ interface ReservationFormProps {
 }
 
 const ReservationForm: FC<ReservationFormProps> = ({ detailData }) => {
-  const { checkinTime, checkoutTime, max, rating } = detailData || {};
+  const { checkinTime, checkoutTime, max, rating, priceList } =
+    detailData || {};
 
   const textList = [
     { title: "체크인", text: checkinTime },
@@ -24,7 +26,7 @@ const ReservationForm: FC<ReservationFormProps> = ({ detailData }) => {
   return (
     <Wrap>
       <Top>
-        <em>N박</em>
+        <em>{priceList?.length}박</em>
         <span>
           <FaStar />
           {rating}
@@ -36,7 +38,7 @@ const ReservationForm: FC<ReservationFormProps> = ({ detailData }) => {
       </ButtonBox>
       <Bottom>
         <em>총 합계</em>
-        <span>₩[숙박비 총합]</span>
+        <span>₩ {getPriceSum({ priceList })}</span>
       </Bottom>
     </Wrap>
   );
