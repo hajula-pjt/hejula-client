@@ -4,8 +4,10 @@ import { useRouter } from "next/router";
 
 import PriceDetail from "../src/domain/ReservationConfirm/PriceDetail";
 
-import { Container as OriginContainer } from "./style/layout";
 import useRoomPrices from "../src/domain/ReservationConfirm/hooks/useRoomPrices";
+
+import { Container as OriginContainer } from "./style/layout";
+import { Button, ButtonBox as OriginButtonBox } from "../src/styles/button";
 
 const isNotZero = (text: string) => {
   return text !== "0";
@@ -32,7 +34,7 @@ const ReservationConfirm: FC = () => {
     <Container>
       <PageTitle>확인 및 결제</PageTitle>
       <FlexBox>
-        <article>
+        <ReservationConfirmWrap>
           <SectionTitle>예약 정보</SectionTitle>
           <Infomation>
             <dt>날짜</dt>
@@ -47,7 +49,10 @@ const ReservationConfirm: FC = () => {
               )}
             </dd>
           </Infomation>
-        </article>
+          <ButtonBox>
+            <Button type="button">확인 및 결제</Button>
+          </ButtonBox>
+        </ReservationConfirmWrap>
         <PriceDetail prices={roomPrices} />
       </FlexBox>
     </Container>
@@ -61,6 +66,15 @@ const Container = styled(OriginContainer)`
 const FlexBox = styled.div`
   display: flex;
   justify-content: space-between;
+`;
+
+const ReservationConfirmWrap = styled.article`
+  display: flex;
+  flex-direction: column;
+`;
+
+const ButtonBox = styled(OriginButtonBox)`
+  margin-top: auto;
 `;
 
 const PageTitle = styled.h2`
