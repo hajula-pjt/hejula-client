@@ -1,9 +1,13 @@
 import { RoomPrice } from "../domain/RoomDetail/type";
 
-export const getPriceSum = ({ priceList }: { priceList: RoomPrice[] }) => {
-  const sum = priceList
+export const priceFormat = ({ price }: { price: number }) => {
+  return price?.toLocaleString();
+};
+
+export const getPriceSum = ({ prices }: { prices: RoomPrice[] }) => {
+  const sum = prices
     ?.map((price) => price.price)
     .reduce((prevPrice, nextPrice) => prevPrice + nextPrice);
 
-  return sum?.toLocaleString();
+  return priceFormat({ price: sum });
 };
