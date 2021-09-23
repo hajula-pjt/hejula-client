@@ -69,3 +69,11 @@ export const createRoomReservationConfirmPath = ({
 
   return result;
 };
+
+export const isMainPage = (path: string) => path === "/";
+
+export const isUnVisibleSearchForm = (path: string) => {
+  const unVisiblePath = ["/reservationConfirm"];
+
+  return unVisiblePath.includes(path);
+};
