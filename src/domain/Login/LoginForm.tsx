@@ -1,24 +1,33 @@
-import React from "react";
+import React, { FC } from "react";
 
 import styled from "@emotion/styled";
 
 import { colorPalette } from "../../config/color-config";
 
-interface Props {
-  id: string;
-  password: string;
-  handleSubmit: (e: React.FormEvent<HTMLFormElement>) => void;
-  handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
-  loginError: string | null;
+import useLogin from "./hooks/useLogin";
+
+interface ILoginForm {
+  setCookie: ({ key, value }: { key: string; value: string }) => void;
+  setUser: (value) => void;
+  onLoginFormClose: () => void;
+  onToggleMenuClose: () => void;
 }
 
-const LoginForm = ({
-  id,
-  password,
-  handleSubmit,
-  handleChange,
-  loginError,
-}: Props) => {
+const LoginForm: FC<ILoginForm> = ({
+  setCookie,
+  setUser,
+  onLoginFormClose,
+  onToggleMenuClose,
+}) => {
+  const { loginFields, loginError, handleSubmit, handleChange } = useLogin({
+    setCookie,
+    setUser,
+    onLoginFormClose,
+    onToggleMenuClose,
+  });
+
+  const { id, password } = loginFields;
+
   return (
     <Form onSubmit={handleSubmit}>
       <p>
