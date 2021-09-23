@@ -1,33 +1,31 @@
-import React, { ChangeEvent, useState, useEffect } from "react";
+import React, { ChangeEvent, useState, useEffect, FC } from "react";
 import { useCookies } from "react-cookie";
-
 import axios from "axios";
-
 import styled from "@emotion/styled";
 import { css } from "@emotion/react";
-
 import { IoMdMenu } from "react-icons/io";
 
 import Modal from "./Modal";
-
 import RoomSearchForm from "../domain/RoomSearch/SearchForm/RoomSearchForm";
 import LoginForm from "../domain/Login/LoginForm";
-
 import { postLogin } from "../api/user/postLogin";
-
 import {
   getLocalStorageItem,
   removeLocalStorageItem,
   setLocalStorageItem,
 } from "../utils/localStorage";
-import { FC } from "react";
 
 export type AppLayoutProps = {
   children: React.ReactNode;
   isMainPage: boolean;
+  isUnVisibleSearchForm: boolean;
 };
 
-const AppLayout: FC<AppLayoutProps> = ({ children, isMainPage }) => {
+const AppLayout: FC<AppLayoutProps> = ({
+  children,
+  isMainPage,
+  isUnVisibleSearchForm,
+}) => {
   const [user, setUser] = useState(null);
   const [cookies, setCookie, removeCookie] = useCookies(["Authorization"]);
 
@@ -108,7 +106,7 @@ const AppLayout: FC<AppLayoutProps> = ({ children, isMainPage }) => {
         <Logo>
           <button type="button">HAJULA</button>
         </Logo>
-        <RoomSearchForm shadow={!isMainPage} />
+        {!isUnVisibleSearchForm && <RoomSearchForm shadow={!isMainPage} />}
         <ToggleMenuButton>
           <button type="button" onClick={handleToggleMenuButtonClick}>
             {user ? (
@@ -121,9 +119,6 @@ const AppLayout: FC<AppLayoutProps> = ({ children, isMainPage }) => {
             <span className="menu">
               <IoMdMenu />
             </span>
-            {/* <span className="profile">
-              <FaUserCircle />
-            </span> */}
           </button>
         </ToggleMenuButton>
         {toggleMenuOpen && (
@@ -177,10 +172,6 @@ const Header = styled.header`
       h1 *,
       nav * {
         color: #333 !important;
-      }
-      & + main {
-        position: relative;
-        margin-top: 200px;
       }
     `}
 `;
