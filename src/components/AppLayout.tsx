@@ -1,18 +1,18 @@
-import React, { ChangeEvent, useState, useEffect, FC } from "react";
+import React, { useState, useEffect, FC } from "react";
 import { useCookies } from "react-cookie";
 import axios from "axios";
-import styled from "@emotion/styled";
+
 import { css } from "@emotion/react";
+import styled from "@emotion/styled";
 import { IoMdMenu } from "react-icons/io";
 
 import Modal from "./Modal";
 import RoomSearchForm from "../domain/RoomSearch/SearchForm/RoomSearchForm";
 import LoginForm from "../domain/Login/LoginForm";
-import { postLogin } from "../api/user/postLogin";
+
 import {
   getLocalStorageItem,
   removeLocalStorageItem,
-  setLocalStorageItem,
 } from "../utils/localStorage";
 
 export type AppLayoutProps = {
@@ -26,73 +26,48 @@ const AppLayout: FC<AppLayoutProps> = ({
   isMainPage,
   isUnVisibleSearchForm,
 }) => {
-  const [user, setUser] = useState(null);
   const [cookies, setCookie, removeCookie] = useCookies(["Authorization"]);
+
+  const [user, setUser] = useState(null);
 
   const [toggleMenuOpen, setToggleMenuOpen] = useState(false);
   const [loginFormOpen, setLoginFormOepn] = useState(false);
-  const [loginFields, setLoginFields] = useState({
-    id: "",
-    password: "",
-  });
-  const { id, password } = loginFields;
 
-  const [loginError, setLoginError] = useState(null);
+  const handleSetUser = (userInfo) => {
+    setUser(userInfo);
+  };
 
-  const handleToggleMenuButtonClick = () => {
-    setToggleMenuOpen((prev) => !prev);
+  const handleSetCookie = ({ key, value }) => {
+    setCookie(key, value);
+  };
+
+  const handleLogoutClick = () => {
+    removeCookie("Authorization");
+    removeLocalStorageItem({ key: "userInfo" });
+    handleSetUser(null);
   };
 
   const handleLoginModalToggle = () => {
     setLoginFormOepn((prev) => !prev);
   };
 
-  const handleLogoutClick = () => {
-    removeCookie("Authorization");
-    removeLocalStorageItem({ key: "userInfo" });
-    setUser(null);
+  const handleMenuButtonClickToggle = () => {
+    setToggleMenuOpen((prev) => !prev);
   };
 
-  const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
-    const { name, value } = e.target;
-
-    setLoginFields((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+  const handleToggleMenuClose = () => {
+    setToggleMenuOpen(false);
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    try {
-      const result = await postLogin({ id, password });
-      const accessToken = result.token;
-
-      const { nickname, userId, userSeq } = result;
-
-      setCookie("Authorization", accessToken);
-
-      setLocalStorageItem({
-        key: "userInfo",
-        value: JSON.stringify({ nickname, userId, userSeq }),
-      });
-
-      setUser(getLocalStorageItem({ key: "userInfo" })?.nickname);
-
-      setToggleMenuOpen(false);
-      setLoginFormOepn(false);
-      setLoginError(null);
-    } catch (e) {
-      setLoginError(e.message);
-    }
+  const handleLoginFormClose = () => {
+    setLoginFormOepn(false);
   };
 
   useEffect(() => {
-    const userInfo = getLocalStorageItem({ key: "userInfo" });
+    handleSetUser(getLocalStorageItem({ key: "userInfo" }));
+  }, []);
 
-    setUser(userInfo?.nickname || null);
-
+  useEffect(() => {
     if (cookies) {
       axios.defaults.headers.common[
         "Authorization"
@@ -108,10 +83,11 @@ const AppLayout: FC<AppLayoutProps> = ({
         </Logo>
         {!isUnVisibleSearchForm && <RoomSearchForm shadow={!isMainPage} />}
         <ToggleMenuButton>
-          <button type="button" onClick={handleToggleMenuButtonClick}>
+          <button type="button" onClick={handleMenuButtonClickToggle}>
             {user ? (
               <span>
-                👉🏻 <em>{user}</em>님, 안녕하세요
+                👉🏻 <em>{user?.nickname}</em>
+                님, 안녕하세요
               </span>
             ) : (
               <span>👉🏻 로그인 해주세요</span>
@@ -141,11 +117,10 @@ const AppLayout: FC<AppLayoutProps> = ({
       {loginFormOpen && (
         <Modal title="로그인" onOutsideClick={handleLoginModalToggle}>
           <LoginForm
-            id={id}
-            password={password}
-            handleChange={handleChange}
-            handleSubmit={handleSubmit}
-            loginError={loginError}
+            setCookie={handleSetCookie}
+            setUser={handleSetUser}
+            onLoginFormClose={handleLoginFormClose}
+            onToggleMenuClose={handleToggleMenuClose}
           />
         </Modal>
       )}
@@ -181,13 +156,6 @@ const Logo = styled.h1`
     color: #fff;
     font-size: 2rem;
     letter-spacing: 0.2em;
-  }
-`;
-
-const Nav = styled.nav`
-  button {
-    color: #fff;
-    font-size: 1.5rem;
   }
 `;
 
