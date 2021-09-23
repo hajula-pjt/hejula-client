@@ -11,6 +11,7 @@ import { getPriceSum } from "../../utils/price";
 import TextList from "./TextList";
 
 import { IRoomDetail, IRouterQueryData } from "./type";
+import { Button, ButtonBox } from "../../styles/button";
 
 interface ReservationFormProps {
   detailData: IRoomDetail;
@@ -107,18 +108,6 @@ export const Top = styled.p`
       color: ${colorPalette.point};
     }
   }
-`;
-
-export const ButtonBox = styled.p`
-  margin-top: 15px;
-`;
-
-export const Button = styled.button`
-  padding: 15px;
-  width: 100%;
-  color: #fff;
-  background: ${colorPalette.point};
-  border-radius: 20px;
 `;
 
 export const Bottom = styled.p`
