@@ -17,20 +17,14 @@ export const postReservation = async ({
 }) => {
   const {
     data: { completed },
-  } = await axios.post(
-    `/reservation`,
-    {
-      accommodationSeq,
-      customerSeq,
-      adult,
-      children,
-      checkinDate,
-      checkoutDate,
-    },
-    {
-      withCredentials: true,
-    }
-  );
+  } = await axios.post(`/reservation`, {
+    accommodationSeq,
+    customerSeq,
+    adult,
+    children,
+    checkinDate,
+    checkoutDate,
+  });
 
   if (!completed) {
     throw new Error("예약 실패");
