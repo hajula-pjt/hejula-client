@@ -36,6 +36,7 @@ const ReservationConfirm: FC = () => {
 
     if (!customerSeq) {
       alert("로그인을 해주세요 😇");
+      return;
     }
 
     try {
@@ -48,9 +49,9 @@ const ReservationConfirm: FC = () => {
         checkoutDate,
       });
 
-      // router.push("/reservation/success");
+      router.push("/reservationResult/success");
     } catch (e) {
-      router.push("/reservation/fail");
+      router.push("/reservationResult/failure");
     }
   };
 
