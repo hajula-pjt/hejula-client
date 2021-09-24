@@ -6,7 +6,7 @@ import postRoomSearch from "../src/api/searchList/postRoomSearch";
 
 import SearchResultItem from "../src/domain/RoomSearch/SearchResult/SearchResultItem";
 
-import { Container } from "./style/layout";
+import { Container } from "../src/styles/layout";
 
 interface File {
   fileNm: string;
