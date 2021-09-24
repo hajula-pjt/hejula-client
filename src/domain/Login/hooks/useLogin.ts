@@ -1,24 +1,24 @@
 import { ChangeEvent, useState } from "react";
-import { postLogin } from "../../../api/user/postLogin";
-import {
-  getLocalStorageItem,
-  setLocalStorageItem,
-} from "../../../utils/localStorage";
 
-const useLogin = ({
-  setCookie,
-  setUser,
-  onLoginFormClose,
-  onToggleMenuClose,
-}) => {
-  const [loginFields, setLoginFields] = useState({
+import { IloginFields } from "../type";
+
+interface IUserLoginReturnValue {
+  loginFields: IloginFields;
+  loginError: string;
+  handleChange: (e: React.FormEvent) => void;
+  handleSetLoginError: ({ message }: { message: string }) => void;
+}
+
+const useLogin = (): IUserLoginReturnValue => {
+  const [loginFields, setLoginFields] = useState<IloginFields>({
     id: "",
     password: "",
   });
+  const [loginError, setLoginError] = useState<string | null>(null);
 
-  const { id, password } = loginFields;
-
-  const [loginError, setLoginError] = useState(null);
+  const handleSetLoginError = ({ message }: { message: string }) => {
+    setLoginError(message);
+  };
 
   const handleChange = (e: ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
@@ -29,34 +29,7 @@ const useLogin = ({
     }));
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-
-    try {
-      const result = await postLogin({ id, password });
-      const accessToken = result.token;
-
-      const { nickname, userId, userSeq } = result;
-
-      setCookie({ key: "Authorization", value: accessToken });
-
-      setLocalStorageItem({
-        key: "userInfo",
-        value: JSON.stringify({ nickname, userId, userSeq }),
-      });
-
-      setLoginError(null);
-
-      setUser(getLocalStorageItem({ key: "userInfo" }));
-
-      onLoginFormClose();
-      onToggleMenuClose();
-    } catch (e) {
-      setLoginError(e.message);
-    }
-  };
-
-  return { loginFields, loginError, handleChange, handleSubmit };
+  return { loginFields, loginError, handleChange, handleSetLoginError };
 };
 
 export default useLogin;

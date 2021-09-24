@@ -4,32 +4,25 @@ import styled from "@emotion/styled";
 
 import { colorPalette } from "../../config/color-config";
 
-import useLogin from "./hooks/useLogin";
+import { IloginFields } from "./type";
 
 interface ILoginForm {
-  setCookie: ({ key, value }: { key: string; value: string }) => void;
-  setUser: (value) => void;
-  onLoginFormClose: () => void;
-  onToggleMenuClose: () => void;
+  loginFields: IloginFields;
+  loginError: string;
+  onSubmit: (e: React.FormEvent) => Promise<void>;
+  onChange: (e: React.FormEvent) => void;
 }
 
 const LoginForm: FC<ILoginForm> = ({
-  setCookie,
-  setUser,
-  onLoginFormClose,
-  onToggleMenuClose,
+  loginFields,
+  loginError,
+  onSubmit,
+  onChange,
 }) => {
-  const { loginFields, loginError, handleSubmit, handleChange } = useLogin({
-    setCookie,
-    setUser,
-    onLoginFormClose,
-    onToggleMenuClose,
-  });
-
   const { id, password } = loginFields;
 
   return (
-    <Form onSubmit={handleSubmit}>
+    <Form onSubmit={onSubmit}>
       <p>
         <input
           id="id"
@@ -37,7 +30,7 @@ const LoginForm: FC<ILoginForm> = ({
           type="text"
           value={id}
           placeholder="id"
-          onChange={handleChange}
+          onChange={onChange}
         />
       </p>
       <p>
@@ -47,7 +40,7 @@ const LoginForm: FC<ILoginForm> = ({
           type="password"
           value={password}
           placeholder="password"
-          onChange={handleChange}
+          onChange={onChange}
         />
       </p>
       {loginError && <Error>{loginError}</Error>}
