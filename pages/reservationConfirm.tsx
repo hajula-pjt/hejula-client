@@ -6,8 +6,10 @@ import PriceDetail from "../src/domain/ReservationConfirm/PriceDetail";
 
 import useRoomPrices from "../src/domain/ReservationConfirm/hooks/useRoomPrices";
 
-import { Container as OriginContainer } from "./style/layout";
+import { Container as OriginContainer } from "../src/styles/layout";
 import { Button, ButtonBox as OriginButtonBox } from "../src/styles/button";
+import { postReservation } from "../src/api/reservation/postReservation";
+import { getLocalStorageItem } from "../src/utils/localStorage";
 
 const isNotZero = (text: string) => {
   return text !== "0";
@@ -19,9 +21,9 @@ const ReservationConfirm: FC = () => {
   const {
     accommodationSeq,
     adultCount,
+    childrenCount,
     checkinDate,
     checkoutDate,
-    childrenCount,
   } = router.query;
 
   const { roomPrices } = useRoomPrices({
@@ -29,6 +31,26 @@ const ReservationConfirm: FC = () => {
     checkinDate,
     checkoutDate,
   });
+
+  const handleReservationButtonClick = async () => {
+    const { userSeq: customerSeq } =
+      getLocalStorageItem({ key: "userInfo" }) || {};
+
+    try {
+      await postReservation({
+        accommodationSeq,
+        customerSeq,
+        adult: adultCount,
+        children: childrenCount,
+        checkinDate,
+        checkoutDate,
+      });
+
+      router.push("/reservation/success");
+    } catch (e) {
+      router.push("/reservation/fail");
+    }
+  };
 
   return (
     <Container>
@@ -50,7 +72,9 @@ const ReservationConfirm: FC = () => {
             </dd>
           </Infomation>
           <ButtonBox>
-            <Button type="button">확인 및 결제</Button>
+            <Button onClick={handleReservationButtonClick} type="button">
+              확인 및 결제
+            </Button>
           </ButtonBox>
         </ReservationConfirmWrap>
         <PriceDetail prices={roomPrices} />
@@ -66,6 +90,7 @@ const Container = styled(OriginContainer)`
 const FlexBox = styled.div`
   display: flex;
   justify-content: space-between;
+  align-items: flex-start;
 `;
 
 const ReservationConfirmWrap = styled.article`
@@ -88,6 +113,8 @@ const SectionTitle = styled.h3`
 `;
 
 const Infomation = styled.dl`
+  margin-bottom: 20px;
+
   dt,
   dd {
     font-size: 16px;

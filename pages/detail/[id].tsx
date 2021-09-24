@@ -5,7 +5,7 @@ import styled from "@emotion/styled";
 import useRoomDetail from "../../src/domain/RoomDetail/hooks/useRoomDetail";
 import TopContents from "../../src/domain/RoomDetail/TopContents";
 import BodyContents from "../../src/domain/RoomDetail/BodyContents";
-import { Container as OriginContainer } from "../style/layout";
+import { Container as OriginContainer } from "../../src/styles/layout";
 
 const Detail = () => {
   const router = useRouter();

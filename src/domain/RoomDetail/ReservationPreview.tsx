@@ -74,7 +74,7 @@ const ReservationForm: FC<ReservationFormProps> = ({
       </ButtonBox>
       <Bottom>
         <em>총 합계</em>
-        <span>₩ {getPriceSum({ priceList })}</span>
+        <span>₩ {getPriceSum({ prices: priceList })}</span>
       </Bottom>
     </Wrap>
   );
