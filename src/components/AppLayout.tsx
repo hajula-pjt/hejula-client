@@ -33,9 +33,14 @@ const AppLayout: FC<AppLayoutProps> = ({
 
   const cookieKey: TCookieKey = "Authorization";
   const storageKey: TStotageKey = "userInfo";
+  const adminstorageKey: TStotageKey = "adminUserInfo";
 
   const { removeCookie, handleSetCookie } = useLoginCookie({ cookieKey });
   const { user, handleSetUser } = useLoginUserInfo({ storageKey });
+  const { user: adminUser } = useLoginUserInfo({
+    storageKey: adminstorageKey,
+  });
+
   const { loginFields, loginError, handleChange, handleSetLoginError } =
     useLogin();
 
@@ -91,6 +96,7 @@ const AppLayout: FC<AppLayoutProps> = ({
         <HamburgerMenu
           toggleMenuOpen={toggleMenuOpen}
           user={user}
+          adminUser={adminUser}
           onMenuButtonClickToggle={() =>
             handleToggleMenuVisible(!toggleMenuOpen)
           }

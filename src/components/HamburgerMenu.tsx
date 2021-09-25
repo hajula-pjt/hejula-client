@@ -1,10 +1,12 @@
 import styled from "@emotion/styled";
+import Link from "next/Link";
 
 import { IoMdMenu } from "react-icons/io";
 
 const HamburgerMenu = ({
   toggleMenuOpen,
   user,
+  adminUser,
   onMenuButtonClickToggle,
   onLoginModalToggle,
   onLogoutClick,
@@ -39,6 +41,11 @@ const HamburgerMenu = ({
               </button>
             )}
           </li>
+          <li>
+            <Link href={adminUser ? "/admin/home" : "/admin/login"}>
+              <button type="button">관리자 페이지</button>
+            </Link>
+          </li>
         </ToggleMenus>
       )}
     </>
@@ -56,6 +63,7 @@ const ToggleMenuButton = styled.div`
     margin: auto 0;
     padding: 0.4em 0.5em 0.4em 1em;
     cursor: pointer;
+
     .menu svg {
       font-size: 1.6rem;
     }
@@ -80,7 +88,11 @@ const ToggleMenus = styled.ul`
   border-radius: 10px;
   background: #fff;
   box-shadow: 1px 1px 10px rgba(0, 0, 0, 0.3);
-  li button {
+  li + li {
+    border-top: 1px solid #dcdcdc;
+  }
+  li button,
+  li a {
     padding: 20px;
     width: 100%;
     text-align: left;
