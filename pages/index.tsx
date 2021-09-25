@@ -1,6 +1,8 @@
+import Link from "next/Link";
 import Head from "next/head";
 
 import styled from "@emotion/styled";
+import { useLoginUserInfo } from "../src/domain/Login/hooks";
 
 const Home = () => {
   return (
@@ -18,9 +20,6 @@ const Home = () => {
             <span>여행 등 다양한 목적에 맞는 숙소를 찾아보세요</span>
           </p>
         </VisualBanner>
-        <AdminButton onClick={() => alert("준비중입니다.")}>
-          <button type="button">관리자 페이지로 이동</button>
-        </AdminButton>
       </main>
     </>
   );
@@ -51,7 +50,7 @@ const VisualBanner = styled.section({
   },
 });
 
-const AdminButton = styled.section({
+const AdminButton = styled(Link)({
   margin: "2rem",
   button: {
     width: "100%",

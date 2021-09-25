@@ -71,9 +71,20 @@ export const createRoomReservationConfirmPath = ({
 };
 
 export const isMainPage = (path: string) => path === "/";
+export const isAdminPage = ({ pathname }) => {
+  const result = pathname.includes("admin");
+
+  return result;
+};
 
 export const isUnVisibleSearchForm = (path: string) => {
   const unVisiblePath = ["/reservationConfirm", "/reservationResult/[status]"];
 
   return unVisiblePath.includes(path);
+};
+
+export const isVisibleNav = (path: string): boolean => {
+  const unVisiblePath = ["/admin/login"];
+
+  return !unVisiblePath.includes(path);
 };

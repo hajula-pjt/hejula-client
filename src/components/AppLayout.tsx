@@ -1,19 +1,21 @@
-import React, { useState, useEffect, FC } from "react";
-import { useCookies } from "react-cookie";
-import axios from "axios";
+import React, { useState, FC } from "react";
 
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
 
-import Modal from "./Modal";
 import RoomSearchForm from "../domain/RoomSearch/SearchForm/RoomSearchForm";
 import LoginForm from "../domain/Login/LoginForm";
+import Modal from "./Modal";
+import HamburgerMenu from "./HamburgerMenu";
 
 import {
-  getLocalStorageItem,
-  removeLocalStorageItem,
-} from "../utils/localStorage";
-import HamburgerMenu from "./HamburgerMenu";
+  useLogin,
+  useLoginCookie,
+  useLoginUserInfo,
+} from "../domain/Login/hooks";
+import { setUserInfo, removeUserInfo } from "../domain/Login/utils";
+import { TCookieKey, TStotageKey } from "../domain/Login/type";
+import { postLogin } from "../api/user/postLogin";
 
 export type AppLayoutProps = {
   children: React.ReactNode;
@@ -26,54 +28,63 @@ const AppLayout: FC<AppLayoutProps> = ({
   isMainPage,
   isUnVisibleSearchForm,
 }) => {
-  const [cookies, setCookie, removeCookie] = useCookies(["Authorization"]);
-
-  const [user, setUser] = useState(null);
-
   const [toggleMenuOpen, setToggleMenuOpen] = useState(false);
   const [loginFormOpen, setLoginFormOepn] = useState(false);
 
-  const handleSetUser = (userInfo) => {
-    setUser(userInfo);
+  const cookieKey: TCookieKey = "Authorization";
+  const storageKey: TStotageKey = "userInfo";
+  const adminstorageKey: TStotageKey = "adminUserInfo";
+
+  const { removeCookie, handleSetCookie } = useLoginCookie({ cookieKey });
+  const { user, handleSetUser } = useLoginUserInfo({ storageKey });
+  const { user: adminUser } = useLoginUserInfo({
+    storageKey: adminstorageKey,
+  });
+
+  const { loginFields, loginError, handleChange, handleSetLoginError } =
+    useLogin();
+
+  const { id, password } = loginFields;
+
+  const handleToggleMenuVisible = (status: boolean) => {
+    setToggleMenuOpen(status);
   };
 
-  const handleSetCookie = ({ key, value }) => {
-    setCookie(key, value);
+  const handleLoginModalVisible = (status: boolean) => {
+    setLoginFormOepn(status);
+  };
+
+  const handleSubmit = async (e: React.FormEvent): Promise<void> => {
+    e.preventDefault();
+
+    try {
+      const result = await postLogin({ id, password });
+
+      setUserInfo({
+        userInfo: result,
+        storageKey: "userInfo",
+        cookieKey: "Authorization",
+        setUser: handleSetUser,
+        setCookie: handleSetCookie,
+      });
+
+      handleToggleMenuVisible(false);
+      handleLoginModalVisible(false);
+
+      handleSetLoginError(null);
+    } catch (e) {
+      handleSetLoginError({ message: e.message });
+    }
   };
 
   const handleLogoutClick = () => {
-    removeCookie("Authorization");
-    removeLocalStorageItem({ key: "userInfo" });
-    handleSetUser(null);
+    removeUserInfo({
+      cookieKey,
+      storageKey,
+      removeCookie,
+      setUser: handleSetUser,
+    });
   };
-
-  const handleLoginModalToggle = () => {
-    setLoginFormOepn((prev) => !prev);
-  };
-
-  const handleMenuButtonClickToggle = () => {
-    setToggleMenuOpen((prev) => !prev);
-  };
-
-  const handleToggleMenuClose = () => {
-    setToggleMenuOpen(false);
-  };
-
-  const handleLoginFormClose = () => {
-    setLoginFormOepn(false);
-  };
-
-  useEffect(() => {
-    handleSetUser(getLocalStorageItem({ key: "userInfo" }));
-  }, []);
-
-  useEffect(() => {
-    if (cookies) {
-      axios.defaults.headers.common[
-        "Authorization"
-      ] = `Bearer ${cookies.Authorization}`;
-    }
-  }, [cookies]);
 
   return (
     <>
@@ -85,18 +96,24 @@ const AppLayout: FC<AppLayoutProps> = ({
         <HamburgerMenu
           toggleMenuOpen={toggleMenuOpen}
           user={user}
-          onMenuButtonClickToggle={handleMenuButtonClickToggle}
-          onLoginModalToggle={handleLoginModalToggle}
+          adminUser={adminUser}
+          onMenuButtonClickToggle={() =>
+            handleToggleMenuVisible(!toggleMenuOpen)
+          }
+          onLoginModalToggle={() => handleLoginModalVisible(!loginFormOpen)}
           onLogoutClick={handleLogoutClick}
         />
       </Header>
       {loginFormOpen && (
-        <Modal title="로그인" onOutsideClick={handleLoginModalToggle}>
+        <Modal
+          title="로그인"
+          onOutsideClick={() => handleLoginModalVisible(false)}
+        >
           <LoginForm
-            setCookie={handleSetCookie}
-            setUser={handleSetUser}
-            onLoginFormClose={handleLoginFormClose}
-            onToggleMenuClose={handleToggleMenuClose}
+            loginFields={loginFields}
+            loginError={loginError}
+            onSubmit={handleSubmit}
+            onChange={handleChange}
           />
         </Modal>
       )}
