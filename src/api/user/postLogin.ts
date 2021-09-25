@@ -1,12 +1,19 @@
 import axios from "axios";
 
+export interface IPostLoginResultValue {
+  nickname: string;
+  token: string;
+  userId: string;
+  userSeq: number;
+}
+
 export const postLogin = async ({
   id,
   password,
 }: {
   id: string;
   password: string;
-}) => {
+}): Promise<IPostLoginResultValue> => {
   const result = await axios.post("/user/signIn", {
     id,
     password,
