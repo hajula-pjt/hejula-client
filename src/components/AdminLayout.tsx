@@ -1,3 +1,4 @@
+import styled from "@emotion/styled";
 import React, { FC } from "react";
 
 export type AdminLayoutProps = {
@@ -7,20 +8,22 @@ export type AdminLayoutProps = {
 
 const AdminLayout: FC<AdminLayoutProps> = ({ children, isVisibleNav }) => {
   return (
-    <>
+    <Container>
       {isVisibleNav && (
         <nav>
           <ul>
-            <li>1</li>
-            <li>1</li>
-            <li>1</li>
-            <li>1</li>
+            <li></li>
           </ul>
         </nav>
       )}
       {children}
-    </>
+    </Container>
   );
 };
+
+const Container = styled.div`
+  padding: 30px;
+  background: #f9f9fd;
+`;
 
 export default AdminLayout;
