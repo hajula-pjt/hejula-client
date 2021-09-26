@@ -4,8 +4,8 @@ import { ICustomerInfomation } from "../../domain/admin/type/customer";
 
 const getCustomerReport = async ({
   adminId,
-  rows = 1,
-  pageNo = 1,
+  rows = 10,
+  pageNo = 0,
 }: {
   adminId: string;
   rows?: number;
