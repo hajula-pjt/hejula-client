@@ -1,4 +1,5 @@
 import React, { useState, FC } from "react";
+import Link from "next/Link";
 
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
@@ -90,7 +91,9 @@ const AppLayout: FC<AppLayoutProps> = ({
     <>
       <Header shadow={!isMainPage}>
         <Logo>
-          <button type="button">HAJULA</button>
+          <Link href="/">
+            <a>HAJULA</a>
+          </Link>
         </Logo>
         {!isUnVisibleSearchForm && <RoomSearchForm shadow={!isMainPage} />}
         <HamburgerMenu
@@ -145,7 +148,7 @@ const Header = styled.header`
 `;
 
 const Logo = styled.h1`
-  button {
+  a {
     color: #fff;
     font-size: 2rem;
     letter-spacing: 0.2em;
