@@ -1,26 +1,36 @@
 import { useCallback, useEffect, useState } from "react";
 import Link from "next/Link";
+import { useRouter } from "next/router";
 import styled from "@emotion/styled";
 
 import * as api from "../../src/api/admin";
-import MonthlyStatistics from "../../src/domain/admin/MonthlyStatistics";
-import { useLoginUserInfo } from "../../src/domain/Login/hooks";
+import { useLoginCookie, useLoginUserInfo } from "../../src/domain/Login/hooks";
+
 import { IMonthlyStatistics } from "../../src/domain/admin/type/Statistics";
+import { ICustomerInfomation } from "../../src/domain/admin/type/customer";
+
+import MonthlyStatistics from "../../src/domain/admin/MonthlyStatistics";
 import WeeklyCustomerStatistics from "../../src/domain/admin/WeeklyCustomerStatistics";
+import CustomerReport from "../../src/domain/admin/CustomerReport";
 
 const Home = () => {
+  const { user } = useLoginUserInfo({
+    storageKey: "adminUserInfo",
+  });
+
+  const { userId } = user || {};
+
   const [statistics, setStatistics] = useState<{
     monthly: IMonthlyStatistics | null;
     weeklyCustomer: number[] | null;
+    customerList: ICustomerInfomation[] | null;
   }>({
     monthly: null,
     weeklyCustomer: null,
+    customerList: null,
   });
 
   const { visitors, sales, rateOperation } = statistics?.monthly || {};
-
-  const { user } = useLoginUserInfo({ storageKey: "adminUserInfo" });
-  const { userId } = user || {};
 
   const getMonthlyStatistics = useCallback(async () => {
     try {
@@ -45,10 +55,24 @@ const Home = () => {
     }
   }, [userId]);
 
+  const getCustomerReport = useCallback(async () => {
+    try {
+      const result = await api.getCustomerReport({ adminId: userId });
+
+      setStatistics((prev) => ({
+        ...prev,
+        customerList: result,
+      }));
+    } catch (e) {
+      console.error(e);
+    }
+  }, [userId]);
+
   useEffect(() => {
     getMonthlyStatistics();
     getWeeklyCustomerStatistics();
-  }, [getMonthlyStatistics, getWeeklyCustomerStatistics]);
+    getCustomerReport();
+  }, [getMonthlyStatistics, getWeeklyCustomerStatistics, getCustomerReport]);
 
   if (!user) {
     return (
@@ -72,40 +96,7 @@ const Home = () => {
         rateOperation={rateOperation}
       />
       <WeeklyCustomerStatistics />
-      <article>
-        <h3>숙박 현황</h3>
-        <dl>
-          <dt>
-            <span>예약 숙소</span>
-            <span>예약자</span>
-            <span>인원</span>
-            <span>숙박 일정</span>
-          </dt>
-          <dd>
-            <span>A숙소</span>
-            <span>영국너구리</span>
-            <span>3명(어른 2 + 어린이 1)</span>
-            <span>2021.06.13 ~ 2021.06.15(2박 3일)</span>
-          </dd>
-          <dd>
-            <span>A숙소</span>
-            <span>영국너구리</span>
-            <span>3명(어른 2 + 어린이 1)</span>
-            <span>2021.06.13 ~ 2021.06.15(2박 3일)</span>
-          </dd>
-          <dd>
-            <span>A숙소</span>
-            <span>영국너구리</span>
-            <span>3명(어른 2 + 어린이 1)</span>
-            <span>2021.06.13 ~ 2021.06.15(2박 3일)</span>
-          </dd>
-        </dl>
-        <p>
-          <button type="button">1</button>
-          <button type="button">2</button>
-          <button type="button">3</button>
-        </p>
-      </article>
+      <CustomerReport data={statistics?.customerList} />
     </Main>
   );
 };

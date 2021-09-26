@@ -29,6 +29,11 @@ const WeeklyCustomerStatistics = () => {
 const Article = styled.article`
   h3 {
     font-size: 20px;
+    margin-bottom: 20px;
+  }
+  div {
+    padding: 20px;
+    background: #fff;
   }
 `;
 
