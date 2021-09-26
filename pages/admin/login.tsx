@@ -1,5 +1,5 @@
+import { useEffect } from "react";
 import { useRouter } from "next/router";
-import { useEffect, useState } from "react";
 import styled from "@emotion/styled";
 
 import { postAdminLogin } from "../../src/api/user/postAdminLogin";
@@ -31,7 +31,7 @@ const Admin = () => {
     if (user) {
       router.push("/admin/home");
     }
-  }, [user]);
+  }, [user, router]);
 
   const handleSubmit = async (e: React.FormEvent): Promise<void> => {
     e.preventDefault();
