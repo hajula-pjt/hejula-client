@@ -1,5 +1,6 @@
 import styled from "@emotion/styled";
 import { FC } from "react";
+import { colorPalette } from "../../config/color-config";
 import { priceFormat } from "../../utils/price";
 import { IMonthlyStatistics } from "./type/Statistics";
 
@@ -69,7 +70,7 @@ const DoughnutChart = styled.p`
   height: 150px;
   border-radius: 50%;
   background: ${({ percent }) =>
-    `conic-gradient(#8b22ff 0% ${percent}%, #dcdcdc ${percent}% 100%)`};
+    `conic-gradient(${colorPalette.point} 0% ${percent}%, #eee ${percent}% 100%)`};
 
   span {
     display: flex;

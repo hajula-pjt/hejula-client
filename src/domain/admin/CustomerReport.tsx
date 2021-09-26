@@ -10,6 +10,8 @@ interface ICustomerReport {
 
 const isEmpty = (data) => data?.length === 0;
 
+const getDay = (date) => date.split("-")[2];
+
 const CustomerReport: FC<ICustomerReport> = ({ data }) => {
   return (
     <ReportList>
@@ -35,6 +37,7 @@ const CustomerReport: FC<ICustomerReport> = ({ data }) => {
               index
             ) => {
               const sum = adult + children;
+              const stayDay = getDay(checkoutDate) - getDay(checkinDate);
               return (
                 <ListItem key={`customer${index}`}>
                   <span>{accommodationName}</span>
@@ -43,7 +46,7 @@ const CustomerReport: FC<ICustomerReport> = ({ data }) => {
                     {sum}명(어른 {adult} + 어린이 {children})
                   </span>
                   <span>
-                    {checkinDate} ~ {checkoutDate}(2박 3일)
+                    {checkinDate} ~ {checkoutDate}({stayDay}박 {stayDay + 1}일)
                   </span>
                 </ListItem>
               );
@@ -72,12 +75,10 @@ const ReportList = styled.article`
 
 const List = styled.dl`
   background: #fff;
-  /* border: 1px solid #dcdcdc; */
 `;
 
 const EmptyBox = styled.div`
   padding: 20px;
-  /* border: 1px solid #dcdcdc; */
   color: #999;
   text-align: center;
 `;
