@@ -3,3 +3,5 @@ export interface IMonthlyStatistics {
   sales: number;
   visitors: number;
 }
+
+export interface IWeeklyCustomerStatistics {}

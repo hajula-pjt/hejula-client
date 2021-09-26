@@ -1,31 +1,67 @@
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
+import Link from "next/Link";
 import styled from "@emotion/styled";
 
-import * as api from "../../src/api/admin/getMonthlyStatistics";
+import * as api from "../../src/api/admin";
 import MonthlyStatistics from "../../src/domain/admin/MonthlyStatistics";
 import { useLoginUserInfo } from "../../src/domain/Login/hooks";
 import { IMonthlyStatistics } from "../../src/domain/admin/type/Statistics";
+import WeeklyCustomerStatistics from "../../src/domain/admin/WeeklyCustomerStatistics";
 
 const Home = () => {
-  const [statistics, setStatistics] = useState<IMonthlyStatistics | null>(null);
-  const { visitors, sales, rateOperation } = statistics || {};
+  const [statistics, setStatistics] = useState<{
+    monthly: IMonthlyStatistics | null;
+    weeklyCustomer: number[] | null;
+  }>({
+    monthly: null,
+    weeklyCustomer: null,
+  });
+
+  const { visitors, sales, rateOperation } = statistics?.monthly || {};
 
   const { user } = useLoginUserInfo({ storageKey: "adminUserInfo" });
   const { userId } = user || {};
 
-  const getMonthlyStatistics = async () => {
+  const getMonthlyStatistics = useCallback(async () => {
     try {
       const result = await api.getMonthlyStatistics({ adminId: userId });
 
-      setStatistics(result);
+      setStatistics((prev) => ({
+        ...prev,
+        monthly: result,
+      }));
     } catch (e) {
       console.error(e);
     }
-  };
+  }, [userId]);
+
+  const getWeeklyCustomerStatistics = useCallback(async () => {
+    try {
+      const result = await api.getWeeklyCustomerStatistics({ adminId: userId });
+      //FIXME
+      // 더미데이터를 실데이터로 바꾸는 작업 필요
+    } catch (e) {
+      console.error(e);
+    }
+  }, [userId]);
 
   useEffect(() => {
     getMonthlyStatistics();
-  }, [userId]);
+    getWeeklyCustomerStatistics();
+  }, [getMonthlyStatistics, getWeeklyCustomerStatistics]);
+
+  if (!user) {
+    return (
+      <div>
+        <p>로그인이 필요한 페이지입니다</p>
+        <p>
+          <Link href="/admin/login">
+            <a>로그인하기</a>
+          </Link>
+        </p>
+      </div>
+    );
+  }
 
   return (
     <Main>
@@ -35,10 +71,7 @@ const Home = () => {
         sales={sales}
         rateOperation={rateOperation}
       />
-      <article>
-        <h3>금주 투숙객 현황</h3>
-        <div>그래프 영역</div>
-      </article>
+      <WeeklyCustomerStatistics />
       <article>
         <h3>숙박 현황</h3>
         <dl>
@@ -79,7 +112,7 @@ const Home = () => {
 
 const Main = styled.main`
   article + article {
-    margin-top: 30px;
+    margin-top: 50px;
   }
 `;
 
