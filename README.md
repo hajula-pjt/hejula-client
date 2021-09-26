@@ -13,8 +13,15 @@ npm install
 ```
 npm run dev
 ```
+## Skills
+- HTML5, CSS3
+- JavaScript
+- TypeScript
+- React
+- NextJs
+- Emotion
 
-# 구현기능
+## 구현기능
 ## 유저 페이지
 ### 숙소 검색
 - [x] 숙소 검색
