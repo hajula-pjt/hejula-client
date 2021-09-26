@@ -5,20 +5,25 @@ import styled from "@emotion/styled";
 
 import * as api from "../../src/api/admin";
 import { useLoginCookie, useLoginUserInfo } from "../../src/domain/Login/hooks";
-
 import { IMonthlyStatistics } from "../../src/domain/admin/type/Statistics";
-import { ICustomerInfomation } from "../../src/domain/admin/type/customer";
 
 import MonthlyStatistics from "../../src/domain/admin/MonthlyStatistics";
 import WeeklyCustomerStatistics from "../../src/domain/admin/WeeklyCustomerStatistics";
 import CustomerReport from "../../src/domain/admin/CustomerReport";
+import { ICustomerInfomation } from "../../src/domain/admin/type/customer";
+import { removeUserInfo } from "../../src/domain/Login/utils";
+import { colorPalette } from "../../src/config/color-config";
 
 const Home = () => {
-  const { user } = useLoginUserInfo({
+  const router = useRouter();
+
+  const { user, handleSetUser } = useLoginUserInfo({
     storageKey: "adminUserInfo",
   });
-
-  const { userId } = user || {};
+  const { removeCookie } = useLoginCookie({
+    cookieKey: "AdminAuthorization",
+  });
+  const { userId, nickname } = user || {};
 
   const [statistics, setStatistics] = useState<{
     monthly: IMonthlyStatistics | null;
@@ -31,6 +36,8 @@ const Home = () => {
   });
 
   const { visitors, sales, rateOperation } = statistics?.monthly || {};
+
+  console.log({ visitors, sales, rateOperation });
 
   const getMonthlyStatistics = useCallback(async () => {
     try {
@@ -87,9 +94,27 @@ const Home = () => {
     );
   }
 
+  const handleLogoutClick = () => {
+    removeUserInfo({
+      cookieKey: "AdminAuthorization",
+      storageKey: "adminUserInfo",
+      removeCookie,
+      setUser: handleSetUser,
+    });
+    router.push("/admin/login");
+  };
+
   return (
     <Main>
-      <Title>대시보드</Title>
+      <Header>
+        <h2>대시보드</h2>
+        <div>
+          <em>{nickname}님</em>
+          <Button onClick={handleLogoutClick} type="button">
+            로그아웃
+          </Button>
+        </div>
+      </Header>
       <MonthlyStatistics
         visitors={visitors}
         sales={sales}
@@ -107,9 +132,26 @@ const Main = styled.main`
   }
 `;
 
-const Title = styled.h2`
+const Header = styled.div`
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
   margin-bottom: 30px;
-  font-size: 30px;
+  h2 {
+    font-size: 30px;
+  }
+`;
+
+const Button = styled.button`
+  margin-left: 10px;
+  padding: 5px 20px;
+  border: 1px solid #dcdcdc;
+  border-radius: 20px;
+  color: #999;
+  &:hover {
+    border-color: ${colorPalette.point};
+    color: ${colorPalette.point};
+  }
 `;
 
 export default Home;
