@@ -125,7 +125,11 @@ const AppLayout: FC<AppLayoutProps> = ({
   );
 };
 
-const Header = styled.header`
+interface IHeader {
+  shadow: boolean;
+}
+
+const Header = styled.header<IHeader>`
   position: fixed;
   top: 0;
   left: 0;
