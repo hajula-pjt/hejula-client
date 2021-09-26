@@ -1,5 +1,5 @@
 import React, { useState, FC } from "react";
-import Link from "next/Link";
+import Link from "next/link";
 
 import { css } from "@emotion/react";
 import styled from "@emotion/styled";
