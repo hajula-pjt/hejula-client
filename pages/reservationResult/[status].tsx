@@ -1,5 +1,6 @@
 import { useRouter } from "next/router";
-import Link from "next/link";
+import Link from "next/Link";
+
 import styled from "@emotion/styled";
 
 import { AiOutlineCheck } from "react-icons/ai";
