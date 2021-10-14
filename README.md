@@ -6,6 +6,7 @@
 [관리자 페이지](http://49.247.213.4:3000/admin/home)
 
 ## 데모 계정 (유저 & 관리자 페이지)
+영등포구에 데이터가 많습니다 !
 - id : heaeun
 - password : heaeun!a
 
