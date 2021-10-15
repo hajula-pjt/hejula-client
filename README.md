@@ -3,7 +3,7 @@
 
 ## 👉🏻 배포링크
 [유저 페이지 - 메인](http://49.247.213.4:3000/) <br />
-[유저 페이지 - 검색 결과](http://49.247.213.4:3000/search?guSeq=19&checkInDate=2022-06-16&checkOutDate=2022-07-26&adultCount=2&childrenCount=0&page=0&rows=10) <br />
+[유저 페이지 - 검색 결과](http://49.247.213.4:3000/search?guSeq=19&checkInDate=2021-10-16&checkOutDate=2021-11-21&adultCount=2&childrenCount=0&page=0&rows=10) <br />
 [관리자 페이지](http://49.247.213.4:3000/admin/home)
 
 ## 데모 계정 (유저 & 관리자 페이지)
